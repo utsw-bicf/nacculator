@@ -1,9 +1,12 @@
 import json
+from pkg_resources import resource_filename
 
 def ivp_a1():
+    filepath = resource_filename(__name__, 'ivp_a1.json')
+
     # Read the data from file
     # We now have a Python dictionary
-    with open('ivp_a1.json') as f:
+    with open(filepath) as f:
         data = json.load(f)
         properties = data['properties']
         ivp_a1 = {}
@@ -25,12 +28,11 @@ def ivp_a1():
                         ivp_a1[k1] = {}
                         for value in v2:
                             key = value[0]
-                            # If the first char is not digit then 
+                            # If the first char is not digit then
                             # don't add it in dictionary
                             if key.isnumeric():
                                 ivp_a1[k1][key] = value[2:]
-                        
-                
-            
+
+
+
     return ivp_a1
-    

@@ -24,6 +24,8 @@ setup(
     package_dir = {'nacc': 'nacc'},
     packages = find_packages(),
 
+    include_package_data = True,
+
     entry_points={
         "console_scripts": [
             "redcap2nacc = nacc.redcap2nacc:main"
@@ -34,5 +36,5 @@ setup(
         "cappy @ git+https://github.com/ctsit/cappy.git@2.0.0"
     ],
 
-    python_requires=">=3.6.0",
+    python_requires=">=3.7.0",
 )
