@@ -7,6 +7,7 @@ import os
 import sys
 import argparse
 import pandas as pd
+from nacc.uds3.dict.dictionary import ivp_a1
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -30,65 +31,24 @@ def convert_to_json(options):
     )
 
     # Map each column's values to the corresponding schema values for that header
-    # TODO: Replace this dictionary with actual keys and values
-    schema_dict = {
-        'formver': {
-            '3': 'This is option 3.',
-            'nan': 'Hello World.'
-        },
-        'reason': {
-            '1': 'This is a 1.',
-            '3': 'This is a 3.',
-            'nan': 'This is a NaN replacement test.'
-        }
-    }
+    ivp_a1_schema_dict = ivp_a1()
     for headerIndex, header in enumerate(all_csv):
         for valueIndex, value in enumerate(all_csv[header]):
             # Ensure header exists in dictionary
-            if schema_dict.get(header) is not None:
+            if ivp_a1_schema_dict.get(header) is not None:
                 # Ensure the current value for the current header is valid
-                if str(value) == 'nan' or schema_dict[header].get(value) is None:
-                    all_csv.iat[valueIndex, headerIndex] = schema_dict[header]['nan']
+                if str(value) == 'nan' or ivp_a1_schema_dict[header].get(value) is None:
+                    # all_csv.iat[valueIndex, headerIndex] = ivp_a1_schema_dict[header]['nan']
+                    pass
                 else:
-                    all_csv.iat[valueIndex, headerIndex] = schema_dict[header][value]
+                    all_csv.iat[valueIndex, headerIndex] = str(value + ' ' + ivp_a1_schema_dict[header][value])
 
-    # Create subset dataframes for each form using their respective headers
-    form_a1_headers = [
-        'initials1',
-        'reason',
-        'refersc',
-        'learned',
-        'prestat',
-        'prespart',
-        'source',
-        'birthmo',
-        'birthyr',
-        'sex',
-        'hispanic',
-        'hispor',
-        'hisporx',
-        'race',
-        'racex',
-        'racesec',
-        'racesecx',
-        'raceter',
-        'raceterx',
-        'primlang',
-        'primlanx',
-        'educ',
-        'educ_type',
-        'maristat',
-        'livsitua',
-        'independ',
-        'residenc',
-        'zip',
-        'handed',
-        'ivp_a1_complete'
-    ]
-    form_a1_csv = all_csv[form_a1_headers]
+    # Create subset dataframes for each form using the form schema headers
+    ivp_a1_headers = ivp_a1().keys()
+    ivp_a1_csv = all_csv[ivp_a1_headers]
 
     # Convert each form to JSON
-    form_a1_json = form_a1_csv.to_json(
+    ivp_a1_json = ivp_a1_csv.to_json(
         orient = 'records',
         indent = 2
     )
@@ -100,10 +60,10 @@ def convert_to_json(options):
     )
 
     # Create and write to output JSON file
-    json_file_path = os.path.join(os.getcwd(), 'output.json')
-    json_file = open(json_file_path, 'w')
-    json_file.write(form_a1_json)
-    json_file.close()
+    output_file_path = os.path.join(os.getcwd(), 'output.json')
+    ivp_a1_json_file = open(output_file_path, 'w')
+    ivp_a1_json_file.write(ivp_a1_json)
+    ivp_a1_json_file.close()
 
 def main():
     """
