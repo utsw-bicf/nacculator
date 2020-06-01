@@ -1,4 +1,5 @@
 import json
+from pkg_resources import resource_filename
 
 def ivp_a1():
     # get row headers of for ivp_a1 from redcap
@@ -6,7 +7,8 @@ def ivp_a1():
 
     # Read the data from json schema file
     # We now have a Python dictionary
-    with open('ivp_a1.json') as f:
+    filepath = resource_filename(__name__, 'ivp_a1.json')
+    with open(filepath) as f:
         data = json.load(f)
         properties = data['properties']
         ivp_a1 = {}
