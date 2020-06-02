@@ -1,7 +1,7 @@
 import json
 from pkg_resources import resource_filename
 
-def ivp_a1():
+def ivp_a1_dict():
     # get row headers of for ivp_a1 from redcap
     headersIvp_a1 = ["ptid", "redcap_event_name", "initials1", "reason", "refersc",	"learned", "prestat", "prespart", "source", "birthmo", "birthyr", "sex", "hispanic", "hispor", "hisporx", "race", "racex", "racesec", "racesecx", "raceter", "raceterx", "primlang", "primlanx", "educ", "educ_type", "maristat", "livsitua", "independ", "residenc", "zip", "handed", "ivp_a1_complete"]
 
@@ -40,3 +40,19 @@ def ivp_a1():
     ivp_a1["status"] = {"0":"deleted", "1":"in progress", "2":"released"}
     ivp_a1.pop("schema_version")           
     return ivp_a1
+
+def ivp_a1_types():
+    filepath = resource_filename(__name__, 'ivp_a1.json')
+    with open(filepath) as f:
+        data = json.load(f)
+        properties = data['properties']
+        types = {}
+        for (k1, v1) in properties.items():
+            # Find the key "type:
+            for (k2, v2) in v1.items():
+                if k2 == "type":
+                    types[k1] = v2
+
+    return types
+    
+
