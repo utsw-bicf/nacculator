@@ -5,6 +5,7 @@
 
 import os
 import sys
+import json
 import argparse
 import pandas as pd
 from nacc.uds3.dict.dictionary import ivp_a1
@@ -30,46 +31,60 @@ def convert_to_json(options):
         nrows = 10  # TODO: Remove nrows param when done testing
     )
 
-    # Replace each row/column value (cell) to the corresponding schema value for that header
-    ivp_a1_schema_dict = ivp_a1()
+    # Replace each row/column value (cell) to the corresponding schema value for that header.
+    schema_dict = ivp_a1()
     for headerIndex, header in enumerate(all_csv):
         for valueIndex, value in enumerate(all_csv[header]):
-            # Ensure header exists in dictionary
-            if ivp_a1_schema_dict.get(header) is not None:
-                # Ensure the current value for the current header is valid
-                if str(value) != 'nan' and ivp_a1_schema_dict[header].get(value) is not None:
-                    all_csv.iat[valueIndex, headerIndex] = str(value + ' ' + ivp_a1_schema_dict[header][value])
+            # Ensure header exists in dictionary.
+            if schema_dict.get(header) is not None:
+                # Ensure the current value for the current header is valid.
+                if str(value) != 'nan' and schema_dict[header].get(value) is not None:
+                    all_csv.iat[valueIndex, headerIndex] = str(value + ' ' + schema_dict[header][value])
 
-    # Create a list of subset headers using the form schema headers (dictionary)
-    ivp_a1_headers = list(ivp_a1_schema_dict.keys())
+    # Create a list of subset headers using the form's schema headers (dictionary.py).
+    form_subset_headers = list(schema_dict.keys())
 
-    # Ensure all headers from dictionary exist in the CSV file
-    # If not, remove them from the headers subset list
-    for header in ivp_a1_headers:
-        if all_csv.get(header) is None:
-            ivp_a1_headers.remove(header)
+    # Create the subset dataframe for the specific form.
+    form_csv = all_csv[form_subset_headers]
 
-    # Create the subset dataframe for the specific form
-    ivp_a1_csv = all_csv[ivp_a1_headers]
+    # Drop all fully empty records (rows).
+    # Runs .dropna on all columns except the 'status' header b/c status makes empty records not empty.
+    form_csv = form_csv.dropna(how = "all")
 
-    # Drop all fully empty records (rows)
-    ivp_a1_csv = ivp_a1_csv.dropna(how = 'all')
+    # Fill any remaining empty cells with empty strings.
+    # These would be cells in which its entire row was not empty.
+    # Makes it simple to remove specific key/value pairs later on.
+    form_csv = form_csv.fillna(value = "")
 
-    # Fill any remaining empty cells with empty strings
-    # These would be cells in which its entire row was not empty
-    ivp_a1_csv = ivp_a1_csv.fillna(value = "")
+    # Include status key/value pair
+    status_dict = {"0": "incomplete", "1": "unverified", "2": "complete"}
+    form_csv["form_status"] = all_csv["ivp_a1_complete"]
+    form_csv = form_csv.replace({"form_status": status_dict})
 
     # Convert form to JSON
-    ivp_a1_json = ivp_a1_csv.to_json(
+    form_json = form_csv.to_json(
         orient = 'records',
         indent = 2
     )
 
+    # Remove key/value pairs that have empty strings as values.
+    # Using the included .dropna in the pandas library doesn't allow for records to vary in size.
+    # Dropped key/value pairs will reappear with null values.
+    form_dict = form_csv.to_dict(orient = "records")
+    to_delete = []
+    for index, record in enumerate(form_dict):
+        for key, value in form_dict[index].items():
+            if form_dict[index][key] is "":
+                to_delete.append((index, key))
+    for pair in to_delete:
+        del form_dict[pair[0]][pair[1]]
+    form_json = json.dumps(form_dict, indent = 2)
+
     # Create and write to output JSON file
     output_file_path = os.path.join(os.getcwd(), 'output_ivp_a1.json')
-    ivp_a1_json_file = open(output_file_path, 'w')
-    ivp_a1_json_file.write(ivp_a1_json)
-    ivp_a1_json_file.close()
+    form_json_file = open(output_file_path, 'w')
+    form_json_file.write(form_json)
+    form_json_file.close()
 
 def main():
     """
