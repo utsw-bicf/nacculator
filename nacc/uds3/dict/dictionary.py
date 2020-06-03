@@ -37,7 +37,7 @@ def ivp_a1_dict():
                                 # don't add it in dictionary
                                 if key.isnumeric():
                                     ivp_a1[k1][key] = value[2:]
-    ivp_a1["status"] = {"0":"deleted", "1":"in progress", "2":"released"}
+    ivp_a1["ivp_a1_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
     ivp_a1.pop("schema_version")
     return ivp_a1
 
