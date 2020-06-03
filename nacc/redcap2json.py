@@ -8,7 +8,8 @@ import sys
 import json
 import argparse
 import pandas as pd
-from nacc.uds3.dict.dictionary import ivp_a1
+from nacc.uds3.dict.dictionary import ivp_a1_dict
+from nacc.uds3.dict.dictionary import ivp_a1_types
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -32,13 +33,16 @@ def convert_to_json(options):
     )
 
     # Replace each row/column value (cell) to the corresponding schema value for that header.
-    schema_dict = ivp_a1()
+    schema_dict = ivp_a1_dict()
     for headerIndex, header in enumerate(all_csv):
         for valueIndex, value in enumerate(all_csv[header]):
             # Ensure header exists in dictionary.
             if schema_dict.get(header) is not None:
+                # Map the '<form_type>_complete' header values without the raw-value appended to the mapped value
+                if "_complete" in str(header):
+                    all_csv.iat[valueIndex, headerIndex] = str(schema_dict[header][value])
                 # Ensure the current value for the current header is valid.
-                if str(value) != 'nan' and schema_dict[header].get(value) is not None:
+                elif str(value) != 'nan' and schema_dict[header].get(value) is not None:
                     all_csv.iat[valueIndex, headerIndex] = str(value + ' ' + schema_dict[header][value])
 
     # Create a list of subset headers using the form's schema headers (dictionary.py).
@@ -48,18 +52,18 @@ def convert_to_json(options):
     form_csv = all_csv[form_subset_headers]
 
     # Drop all fully empty records (rows).
-    # Runs .dropna on all columns except the 'status' header b/c status makes empty records not empty.
-    form_csv = form_csv.dropna(how = "all")
+    # Runs .dropna on all columns except the 'ivp_a1_complete' header b/c 'ivp_a1_complete' makes empty records not empty.
+    columns_to_check_to_drop = form_subset_headers
+    columns_to_check_to_drop.remove("ivp_a1_complete")
+    form_csv = form_csv.dropna(how = "all", subset = columns_to_check_to_drop)
 
     # Fill any remaining empty cells with empty strings.
     # These would be cells in which its entire row was not empty.
     # Makes it simple to remove specific key/value pairs later on.
     form_csv = form_csv.fillna(value = "")
 
-    # Include status key/value pair
-    status_dict = {"0": "incomplete", "1": "unverified", "2": "complete"}
-    form_csv["form_status"] = all_csv["ivp_a1_complete"]
-    form_csv = form_csv.replace({"form_status": status_dict})
+    # Rename the '<form_type>_complete' header
+    form_csv = form_csv.rename(columns = {"ivp_a1_complete": "form_status"})
 
     # Convert form to JSON
     form_json = form_csv.to_json(
