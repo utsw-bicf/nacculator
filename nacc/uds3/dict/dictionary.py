@@ -22,7 +22,7 @@ def ivp_a1_dict():
                     # find out if k1 is the form ivp_a1 header
                     if k1 in headersIvp_a1:
                         # Find if the enums is a dictionary
-                        # If the enums are just numbers then it will 
+                        # If the enums are just numbers then it will
                         # be an empty dictionary
                         hasDict = False
                         for i in v2:
@@ -33,12 +33,12 @@ def ivp_a1_dict():
                         if hasDict:
                             for value in v2:
                                 key = value[0]
-                                # If the first char is not digit then 
+                                # If the first char is not digit then
                                 # don't add it in dictionary
                                 if key.isnumeric():
                                     ivp_a1[k1][key] = value[2:]
-    ivp_a1["status"] = {"0":"deleted", "1":"in progress", "2":"released"}
-    ivp_a1.pop("schema_version")           
+    ivp_a1["ivp_a1_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
+    ivp_a1.pop("schema_version")
     return ivp_a1
 
 def ivp_a1_types():
@@ -54,5 +54,3 @@ def ivp_a1_types():
                     types[k1] = v2
 
     return types
-    
-
