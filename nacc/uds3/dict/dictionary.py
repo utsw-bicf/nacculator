@@ -52,5 +52,5 @@ def ivp_a1_types():
             for (k2, v2) in v1.items():
                 if k2 == "type":
                     types[k1] = v2
-
+    types["ivp_a1_complete"] = "string"
     return types
