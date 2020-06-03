@@ -39,7 +39,7 @@ def convert_to_json(options):
             # Ensure header exists in dictionary.
             if schema_dict.get(header) is not None:
                 # Map the '<form_type>_complete' header values without the raw-value appended to the mapped value
-                if "_complete" in str(header):
+                if "_complete" in header:
                     all_csv.iat[valueIndex, headerIndex] = str(schema_dict[header][value])
                 # Ensure the current value for the current header is valid.
                 elif str(value) != 'nan' and schema_dict[header].get(value) is not None:
@@ -82,9 +82,18 @@ def convert_to_json(options):
                 to_delete.append((index, key))
     for pair in to_delete:
         del form_dict[pair[0]][pair[1]]
-    form_json = json.dumps(form_dict, indent = 2)
+
+    # Cast the appropriate type to each value
+    schema_types = ivp_a1_types()
+    for index, record in enumerate(form_dict):
+        for key, value in form_dict[index].items():
+            if schema_types.get(key) == "string":
+                form_dict[index][key] = str(form_dict[index][key])
+            elif schema_types.get(key) == "integer":
+                form_dict[index][key] = int(form_dict[index][key])
 
     # Create and write to output JSON file
+    form_json = json.dumps(form_dict, indent = 2)
     output_file_path = os.path.join(os.getcwd(), 'output_ivp_a1.json')
     form_json_file = open(output_file_path, 'w')
     form_json_file.write(form_json)
