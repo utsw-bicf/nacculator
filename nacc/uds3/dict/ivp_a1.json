@@ -1,7 +1,7 @@
 {
   "title": "NACC Uniform Data Set (UDS) - INITIAL VISIT PACKETFORM A1: SUBJECT DEMOGRAPHICS ",
   "description": "INSTRUCTIONS: This form is to be completed by intake interviewer based on ADC scheduling records, subject interview, medical records, and proxy co-participant report (as needed). For additional clarification and examples, see UDS Coding Guidebook for Initial Visit Packet, Form A1. Check only one box per question.",
-  "comment":"Schema for submitting UDS_ivp_A1 form information.",
+  "comment": "Schema for submitting UDS_ivp_A1 form information.",
   "id": "/profiles/ivp_a1.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "identifyingProperties": [
@@ -48,7 +48,6 @@
     "schema_version": {
       "default": "1"
     },
-
     "reason": {
       "title": "1. Primary reason for coming to ADC:",
       "type": "string",
@@ -80,7 +79,7 @@
       "title": "2b.  If the referral source was self-referral or a non-professional contact, how did the referral source learn of the ADC?",
       "type": "string",
       "enum": [
-        "1 ADC advertisement (e.g., website, mailing, newspaper ad, community presentation) ",
+        "1 ADC advertisement (e.g., website, mailing, newspaper ad, community presentation)",
         "2 News article or TV program mentioning the ADC study",
         "3 Conference or community event (e.g., community memory walk)",
         "4 Another organization's media appeal or website (e.g., Alzheimer's Association, clinicaltrials.gov)",
@@ -124,7 +123,8 @@
       "title": "6b. Subject's year of birth(YYYY)",
       "description": "Date can be submitted as YYYY.",
       "type": "integer",
-      "minimum": 1900
+      "minimum": 1900,
+      "maximum":2100
     },
     "sex": {
       "title": "7. Subject's sex:",
@@ -160,7 +160,7 @@
     },
     "hisporx": {
       "title": "8a1. Other (specify subjects reported origins):",
-      "description":"(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
       "type": "string"
     },
     "race": {
@@ -179,7 +179,7 @@
     },
     "racex": {
       "title": "9a. Other (specify subjects race):",
-      "description":"(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
       "type": "string"
     },
     "racesec": {
@@ -199,7 +199,7 @@
     },
     "racesecx": {
       "title": "10a. Other (specify subject's additional race):",
-      "description":"(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
       "type": "string"
     },
     "raceter": {
@@ -219,7 +219,7 @@
     },
     "raceterx": {
       "title": "11a. Other (specify subject's additonal race beyond questions 9 and 10):",
-      "description":"(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
       "type": "string"
     },
     "primlang": {
@@ -239,7 +239,7 @@
     },
     "primlanx": {
       "title": "12a. Other (specify subject's primary language):",
-      "description":"(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
       "type": "string"
     },
     "educ": {
@@ -247,9 +247,44 @@
       "description": "12 = High school or GED,16 = Bachelor's degree,18 = Master's degree,20 = Doctorate,99 = Unknown",
       "type": "integer",
       "enum": [
-        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,99
-        ]
-
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        99
+      ]
     },
     "maristat": {
       "title": "14. Subject's current marital status:",
@@ -318,6 +353,259 @@
       ]
     }
   },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "refersc": {
+              "enum": [
+                "1 Self-referral",
+                "2 Non-professional contact (spouse/partner, relative, friend, coworker, etc.)"
+              ]
+            }
+          },
+          "required": [
+            "learned"
+          ]
+        },
+        {
+          "properties": {
+            "refersc": {
+              "enum": [
+                "3 ADC participant referral",
+                "4 ADC clinician, staff, or investigator referral",
+                "5 Nurse, doctor, or other health care provider",
+                "6 Other research study clinician/staff/investigator (non-ADC; e.g., ADNI, Women's Health Initiative)",
+                "7 Non-ADC media appeal (e.g., Alzheimer's Association)",
+                "8 Other",
+                "9 Unknown"
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "not": {
+                "required": [
+                  "learned"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "hispanic": {
+              "enum": [
+                "1 Yes"
+              ]
+            }
+          },
+          "required": [
+            "hispor"
+          ]
+        },
+        {
+          "properties": {
+            "hispanic": {
+              "enum": [
+                "0 No (If No, SKIP TO QUESTION 9)",
+                "9 Unknown (If Unknown, SKIP TO QUESTION 9)"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "hispor"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "hispor": {
+              "enum": [
+                "50 Other, (specify)"
+              ]
+            }
+          },
+          "required": [
+            "hisporx"
+          ]
+        },
+        {
+          "properties": {
+            "hispor": {
+              "enum": [
+                "1 Mexican, Chicano, or Mexican-American",
+                "2 Puerto Rican",
+                "3 Cuban",
+                "4 Dominican",
+                "5 Central American",
+                "6 South American",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "hisporx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "race": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "racex"
+          ]
+        },
+        {
+          "properties": {
+            "race": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "racex"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "racesec": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "racesecx"
+          ]
+        },
+        {
+          "properties": {
+            "racesec": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "88 None Reported",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "racesecx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "raceter": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "raceterx"
+          ]
+        },
+        {
+          "properties": {
+            "raceter": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "88 None Reported",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "raceterx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "primlang": {
+              "enum": [
+                "8 Other primary language (specify)"
+              ]
+            }
+          },
+          "required": [
+            "primlanx"
+          ]
+        },
+        {
+          "properties": {
+            "primlang": {
+              "enum": [
+                "1 English",
+                "2 Spanish",
+                "3 Mandarin",
+                "4 Cantonese",
+                "5 Russian",
+                "6 Japanese",
+                "9 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "primlanx"
+            ]
+          }
+        }
+      ]
+    }
+  ],
   "facets": {
     "status": {
       "title": "Status"
