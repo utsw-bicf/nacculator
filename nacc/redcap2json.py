@@ -29,7 +29,6 @@ def convert_to_json(options):
     all_csv = pd.read_csv(
         filepath_or_buffer = options.fileIn,
         dtype = str,
-        nrows = 10  # TODO: Remove nrows param when done testing
     )
 
     # Replace each row/column value (cell) to the corresponding schema value for that header.
@@ -39,7 +38,7 @@ def convert_to_json(options):
             # Ensure header exists in dictionary.
             if schema_dict.get(header) is not None:
                 # Map the '<form_type>_complete' header values without the raw-value appended to the mapped value
-                if "_complete" in header:
+                if str(value) != "nan" and "_complete" in header:
                     all_csv.iat[valueIndex, headerIndex] = str(schema_dict[header][value])
                 # Ensure the current value for the current header is valid.
                 elif str(value) != 'nan' and schema_dict[header].get(value) is not None:
