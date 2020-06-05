@@ -1,56 +1,93 @@
 import json
+import os.path
 from pkg_resources import resource_filename
 
-def ivp_a1_dict():
-    # get row headers of for ivp_a1 from redcap
-    headersIvp_a1 = ["ptid", "redcap_event_name", "initials1", "reason", "refersc",	"learned", "prestat", "prespart", "source", "birthmo", "birthyr", "sex", "hispanic", "hispor", "hisporx", "race", "racex", "racesec", "racesecx", "raceter", "raceterx", "primlang", "primlanx", "educ", "educ_type", "maristat", "livsitua", "independ", "residenc", "zip", "handed", "ivp_a1_complete"]
+ivp_a1 = ["ptid", "redcap_event_name", "initials1", "reason", "refersc", "learned", "prestat", "prespart", "source", "birthmo", "birthyr", "sex", "hispanic", "hispor", "hisporx", "race", "racex", "racesec", "racesecx", "raceter", "raceterx", "primlang", "primlanx", "educ", "educ_type", "maristat", "livsitua", "independ", "residenc", "zip", "handed", "ivp_a1_complete"]
+fvp_a1 = ["ptid", "redcap_event_name", "initials17", "fu_birthmo", "fu_birthyr", "fu_maristat",	"fu_sex", "fu_livsitua", "fu_independ",	"fu_residenc", "fu_zip", "fvp_a1_complete"]
+master_id = ["ptid", "redcap_event_name", "utsw_mrn", "pic", "first", "mi",	"last",	"gender", "dob", "ssnmed", "edu", "retard",	"occ", "lang", "ethn", "racial", "racial_other", "tribe", "tribe_other", "percent",	"p_addr1", "p_addr2", "p_city",	"p_state", "p_zip",	"p_phone", "p_phoneext", "p_email",	"c_name", "c_relat", "c_addr1",	"c_addr2", "c_city", "c_state", "c_zip", "c_phone",	"c_phoneext", "c_email", "alt_name", "alt_relation", "alt_addr", "alt_city", "alt_state", "alt_zip", "alt_phone", "alt_altphone", "alt_email", "lar", "larrelation", "laraddr",	"larcity", "larstate", "larzip", "larphone", "laraltphone",	"laremail",	"master_id_complete"]
+header = ["ptid", "redcap_event_name", "formver", "adcid", "visitmo", "visitday", "visityr", "visitnum", "initials", "header_complete"]
 
+formHeaders = {}
+formHeaders["ivp_a1"] = ivp_a1
+formHeaders["fvp_a1"] = fvp_a1
+formHeaders["master_id"] = master_id
+formHeaders["header"] = header
+
+def getDict(dictName):
+    # get row headers of for ivp_a1 from redcap
+    
+    dictionary = {}
+    
     # Read the data from json schema file
     # We now have a Python dictionary
-    filepath = resource_filename(__name__, 'ivp_a1.json')
-    with open(filepath) as f:
-        data = json.load(f)
-        properties = data['properties']
-        ivp_a1 = {}
-        for header in properties.keys():
-            ivp_a1[header] = {}
-        # Read each property in properties
-        for (k1, v1) in properties.items():
-            # Find the property that has enum
-            for (k2, v2) in v1.items():
-                if k2 == "enum":
-                    # find out if k1 is the form ivp_a1 header
-                    if k1 in headersIvp_a1:
-                        # Find if the enums is a dictionary
-                        # If the enums are just numbers then it will
-                        # be an empty dictionary
-                        hasDict = False
-                        for i in v2:
-                            if str(i).isnumeric() == False:
-                                hasDict = True
-                                break
-                        # add enums to dictionary
-                        if hasDict:
-                            for value in v2:
-                                key = value[0]
-                                # If the first char is not digit then
-                                # don't add it in dictionary
-                                if key.isnumeric():
-                                    ivp_a1[k1][key] = value[2:]
-    ivp_a1["ivp_a1_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
-    ivp_a1.pop("schema_version")
-    return ivp_a1
+    if dictName == "header":
+        schemaFile = "mixins.json" 
+    else :
+        schemaFile = dictName + ".json"
+    if os.path.isfile(schemaFile):
+        headers = formHeaders[dictName]
+        filepath = resource_filename(__name__, schemaFile)
+        with open(filepath) as f:
+            data = json.load(f)
+            if dictName == "header":
+                properties = data["header"]
+            else:
+                properties = data['properties']
+            dictionary = {}
+            for header in properties.keys():
+                dictionary[header] = {}
+            # Read each property in properties
+            for (k1, v1) in properties.items():
+                # Find the property that has enum
+                for (k2, v2) in v1.items():
+                    if k2 == "enum":
+                        # find out if k1 is the form header
+                        if k1 in headers:
+                            # Find if the enums is a dictionary
+                            # If the enums are just numbers then it will
+                            # be an empty dictionary
+                            hasDict = False
+                            for i in v2:
+                                if str(i).isnumeric() == False and str(i)[0].isnumeric():
+                                    hasDict = True
+                                    break
+                            # add enums to dictionary
+                            if hasDict:
+                                for value in v2:
+                                    key = value[0]
+                                    # If the first char is not digit then
+                                    # don't add it in dictionary
+                                    if key.isnumeric():
+                                        dictionary[k1][key] = value[2:]
+        dictionary[dictName + "_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
+        if "schema_version" in dictionary:
+            dictionary.pop("schema_version")
+    else:
+        print("No such dictionary!")
+    return dictionary
 
-def ivp_a1_types():
-    filepath = resource_filename(__name__, 'ivp_a1.json')
-    with open(filepath) as f:
-        data = json.load(f)
-        properties = data['properties']
-        types = {}
-        for (k1, v1) in properties.items():
-            # Find the key "type:
-            for (k2, v2) in v1.items():
-                if k2 == "type":
-                    types[k1] = v2
-    types["ivp_a1_complete"] = "string"
+def getTypes(schemaName):
+    if schemaName == "header":
+        schemaFile = "mixins.json" 
+    else :
+        schemaFile = schemaName + ".json"
+    types = {}
+    if os.path.isfile(schemaFile):
+        filepath = resource_filename(__name__, schemaFile)
+        with open(filepath) as f:
+            data = json.load(f)
+            if schemaName == "header":
+                properties = data["header"]
+            else:
+                properties = data['properties']
+            types = {}
+            for (k1, v1) in properties.items():
+                # Find the key "type:
+                for (k2, v2) in v1.items():
+                    if k2 == "type":
+                        types[k1] = v2
+        types[schemaName + "_complete"] = "string"
+    else:
+        print("No such schema!")
     return types
+
