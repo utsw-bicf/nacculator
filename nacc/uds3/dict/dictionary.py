@@ -52,7 +52,7 @@ def getDict(dictName):
     
                                             addToDict(k3, v4, headers, dictionary)
                                     
-        dictionary[dictName + "_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
+        dictionary[dictName + "_complete"] = {"0":"incomplete", "1":"unverified", "2":"complete"}
         if "schema_version" in dictionary:
             dictionary.pop("schema_version")
     else:
@@ -117,7 +117,5 @@ def addToDict(k1, v2, headers, dictionary):
                 if key.isnumeric():
                     dictionary[k1][key] = value[2:]
 
-
-name = "master_id"
+name = "fvp_a1"
 d = getDict(name)
-t = getTypes(name)
