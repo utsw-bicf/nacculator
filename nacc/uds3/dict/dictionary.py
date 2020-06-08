@@ -26,6 +26,8 @@ def getDict(dictName):
             schemaFile = dictName + ".json"
         
         headers = formHeaders[dictName]
+        for header in headers:
+            dictionary[header] = {}
         filepath = resource_filename(__name__, schemaFile)
         with open(filepath) as f:
             data = json.load(f)
@@ -33,32 +35,23 @@ def getDict(dictName):
                 properties = data["header"]
             else:
                 properties = data['properties']
-            dictionary = {}
-            for header in properties.keys():
-                dictionary[header] = {}
+            
+            
             # Read each property in properties
             for (k1, v1) in properties.items():
                 # Find the property that has enum
                 for (k2, v2) in v1.items():
                     if k2 == "enum":
-                        # find out if k1 is the form header
-                        if k1 in headers:
-                            # Find if the enums is a dictionary
-                            # If the enums are just numbers then it will
-                            # be an empty dictionary
-                            hasDict = False
-                            for i in v2:
-                                if str(i).isnumeric() == False and str(i)[0].isnumeric():
-                                    hasDict = True
-                                    break
-                            # add enums to dictionary
-                            if hasDict:
-                                for value in v2:
-                                    key = value[0]
-                                    # If the first char is not digit then
-                                    # don't add it in dictionary
-                                    if key.isnumeric():
-                                        dictionary[k1][key] = value[2:]
+                        addToDict(k1, v2, headers, dictionary)
+                    elif k2 == "type" and v2 =="object":
+                        for (k2, v2) in v1.items():
+                            if k2 == "properties":
+                                for (k3, v3) in v2.items():
+                                    for (k4, v4) in v3.items():
+                                        if k4 == "enum":
+    
+                                            addToDict(k3, v4, headers, dictionary)
+                                    
         dictionary[dictName + "_complete"] = {"0":"deleted", "1":"in progress", "2":"released"}
         if "schema_version" in dictionary:
             dictionary.pop("schema_version")
@@ -84,15 +77,47 @@ def getTypes(dictName):
                 properties = data["header"]
             else:
                 properties = data['properties']
-            types = {}
             for (k1, v1) in properties.items():
                 # Find the key "type:
                 for (k2, v2) in v1.items():
                     if k2 == "type":
-                        types[k1] = v2
-        types[dictName + "_complete"] = "string"
+                        types[k1] = {k2: v2}
+                        if v2 == "object":
+                            for (k2, v2) in v1.items():
+                                if k2 == "properties":
+                                   types[k1][k2]  = {}
+                                   for (k3, v3) in v2.items():
+                                      
+                                      for (k4, v4) in v3.items():
+                                          if k4 == "type":
+                                             types[k1][k2][k3] = {k4: v4} 
+                            
+        types[dictName + "_complete"] = {"type": "string"}
     else:
         print("No such schema!")
     
     return types
 
+def addToDict(k1, v2, headers, dictionary):
+    if k1 in headers:
+        # Find if the enums is a dictionary
+        # If the enums are just numbers then it will
+        # be an empty dictionary
+        hasDict = False
+        for i in v2:
+            if str(i).isnumeric() == False and str(i)[0].isnumeric():
+                hasDict = True
+                break
+        # add enums to dictionary
+        if hasDict:
+            for value in v2:
+                key = value[0]
+                # If the first char is not digit then
+                # don't add it in dictionary
+                if key.isnumeric():
+                    dictionary[k1][key] = value[2:]
+
+
+name = "master_id"
+d = getDict(name)
+t = getTypes(name)
