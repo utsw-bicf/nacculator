@@ -1,7 +1,7 @@
 import json
-import os.path
 from pkg_resources import resource_filename
 
+# get row headers of for ivp_a1 from redcap
 ivp_a1 = ["ptid", "redcap_event_name", "initials1", "reason", "refersc", "learned", "prestat", "prespart", "source", "birthmo", "birthyr", "sex", "hispanic", "hispor", "hisporx", "race", "racex", "racesec", "racesecx", "raceter", "raceterx", "primlang", "primlanx", "educ", "educ_type", "maristat", "livsitua", "independ", "residenc", "zip", "handed", "ivp_a1_complete"]
 fvp_a1 = ["ptid", "redcap_event_name", "initials17", "fu_birthmo", "fu_birthyr", "fu_maristat",	"fu_sex", "fu_livsitua", "fu_independ",	"fu_residenc", "fu_zip", "fvp_a1_complete"]
 master_id = ["ptid", "redcap_event_name", "utsw_mrn", "pic", "first", "mi",	"last",	"gender", "dob", "ssnmed", "edu", "retard",	"occ", "lang", "ethn", "racial", "racial_other", "tribe", "tribe_other", "percent",	"p_addr1", "p_addr2", "p_city",	"p_state", "p_zip",	"p_phone", "p_phoneext", "p_email",	"c_name", "c_relat", "c_addr1",	"c_addr2", "c_city", "c_state", "c_zip", "c_phone",	"c_phoneext", "c_email", "alt_name", "alt_relation", "alt_addr", "alt_city", "alt_state", "alt_zip", "alt_phone", "alt_altphone", "alt_email", "lar", "larrelation", "laraddr",	"larcity", "larstate", "larzip", "larphone", "laraltphone",	"laremail",	"master_id_complete"]
@@ -14,17 +14,17 @@ formHeaders["master_id"] = master_id
 formHeaders["header"] = header
 
 def getDict(dictName):
-    # get row headers of for ivp_a1 from redcap
     
     dictionary = {}
     
-    # Read the data from json schema file
-    # We now have a Python dictionary
-    if dictName == "header":
-        schemaFile = "mixins.json" 
-    else :
-        schemaFile = dictName + ".json"
-    if os.path.isfile(schemaFile):
+    if dictName in formHeaders:
+        # Read the data from json schema file
+        # We now have a Python dictionary
+        if dictName == "header":
+            schemaFile = "mixins.json" 
+        else :
+            schemaFile = dictName + ".json"
+        
         headers = formHeaders[dictName]
         filepath = resource_filename(__name__, schemaFile)
         with open(filepath) as f:
@@ -64,19 +64,23 @@ def getDict(dictName):
             dictionary.pop("schema_version")
     else:
         print("No such dictionary!")
+    
+
     return dictionary
 
-def getTypes(schemaName):
-    if schemaName == "header":
-        schemaFile = "mixins.json" 
-    else :
-        schemaFile = schemaName + ".json"
+def getTypes(dictName):
     types = {}
-    if os.path.isfile(schemaFile):
+    if dictName in formHeaders:
+        if dictName == "header":
+            schemaFile = "mixins.json" 
+        else :
+            schemaFile = dictName + ".json"
+        
+        
         filepath = resource_filename(__name__, schemaFile)
         with open(filepath) as f:
             data = json.load(f)
-            if schemaName == "header":
+            if dictName == "header":
                 properties = data["header"]
             else:
                 properties = data['properties']
@@ -86,8 +90,9 @@ def getTypes(schemaName):
                 for (k2, v2) in v1.items():
                     if k2 == "type":
                         types[k1] = v2
-        types[schemaName + "_complete"] = "string"
+        types[dictName + "_complete"] = "string"
     else:
         print("No such schema!")
+    
     return types
 
