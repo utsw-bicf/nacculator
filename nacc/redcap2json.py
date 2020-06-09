@@ -35,6 +35,7 @@ def convert_to_json(options, schema_name):
         dtype = str
     )
 
+    # Get dictionary containing mapped values
     schema_dict = getDict(schema_name)
 
     # Create a list of subset headers using the form's schema headers (dictionary.py).
@@ -42,6 +43,9 @@ def convert_to_json(options, schema_name):
 
     # Create the subset dataframe for the specific form.
     form_csv = all_csv[form_subset_headers]
+
+    # Drop all rows that are not marked complete (raw value of 2)
+    form_csv = form_csv.drop(form_csv.index[form_csv[schema_name + "_complete"] != "2"])
 
     # Replace each row/column value (cell) to the corresponding schema value for that header.
     for headerIndex, header in enumerate(form_csv):
@@ -54,12 +58,6 @@ def convert_to_json(options, schema_name):
                 # Ensure the current value for the current header is valid.
                 elif str(value) != "nan" and schema_dict[header].get(value) is not None:
                     form_csv.iat[valueIndex, headerIndex] = str(value + " " + schema_dict[header][value])
-
-    # Drop all fully empty records (rows).
-    # Runs .dropna on all columns except the '<schema_name>_complete' header b/c '<schema_name>_complete' makes empty records not empty.
-    columns_to_check_to_drop = form_subset_headers
-    columns_to_check_to_drop.remove(schema_name + "_complete")
-    form_csv = form_csv.dropna(how = "all", subset = columns_to_check_to_drop)
 
     # Fill any remaining empty cells with empty strings.
     # These would be cells in which its entire row was not empty.
