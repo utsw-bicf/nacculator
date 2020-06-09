@@ -1,0 +1,683 @@
+{
+  "title": "NACC Uniform Data Set (UDS) - INITIAL VISIT PACKETFORM A1: SUBJECT DEMOGRAPHICS ",
+  "description": "INSTRUCTIONS: This form is to be completed by intake interviewer based on ADC scheduling records, subject interview, medical records, and proxy co-participant report (as needed). For additional clarification and examples, see UDS Coding Guidebook for Initial Visit Packet, Form A1. Check only one box per question.",
+  "comment": "Schema for submitting UDS_ivp_A1 form information.",
+  "id": "/profiles/ivp_a1.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "identifyingProperties": [
+    "uuid"
+  ],
+  "required": [
+    "reason",
+    "refersc",
+    "prestat",
+    "prespart",
+    "source",
+    "birthmo",
+    "birthyr",
+    "sex",
+    "hispanic",
+    "race",
+    "racesec",
+    "raceter",
+    "primlang",
+    "educ",
+    "maristat",
+    "independ",
+    "residenc",
+    "zip",
+    "handed"
+  ],
+  "additionalProperties": false,
+  "mixinProperties": [
+    {
+      "$ref": "mixins.json#/schema_version"
+    },
+    {
+      "$ref": "mixins.json#/submitted"
+    },
+    {
+      "$ref": "mixins.json#/standard_status"
+    },
+    {
+      "$ref": "mixins.json#/uuid"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "default": "1"
+    },
+    "reason": {
+      "title": "1. Primary reason for coming to ADC:",
+      "type": "string",
+      "enum": [
+        "1 To participate in a research study",
+        "2 To have a clinical evaluation",
+        "3 Other",
+        "4 Both (to participate in a research study and to have a clinical evaluation)",
+        "9 Unknown"
+      ]
+    },
+    "refersc": {
+      "title": "2a. Principal referral source:",
+      "description": "(if answer is 1 or 2, CONTINUE TO QUESTION 2B; otherwise, SKIP TO QUESTION 3.)",
+      "type": "string",
+      "enum": [
+        "1 Self-referral",
+        "2 Non-professional contact (spouse/partner, relative, friend, coworker, etc.)",
+        "3 ADC participant referral",
+        "4 ADC clinician, staff, or investigator referral",
+        "5 Nurse, doctor, or other health care provider",
+        "6 Other research study clinician/staff/investigator (non-ADC; e.g., ADNI, Women's Health Initiative)",
+        "7 Non-ADC media appeal (e.g., Alzheimer's Association)",
+        "8 Other",
+        "9 Unknown"
+      ]
+    },
+    "learned": {
+      "title": "2b.  If the referral source was self-referral or a non-professional contact, how did the referral source learn of the ADC?",
+      "type": "string",
+      "enum": [
+        "1 ADC advertisement (e.g., website, mailing, newspaper ad, community presentation)",
+        "2 News article or TV program mentioning the ADC study",
+        "3 Conference or community event (e.g., community memory walk)",
+        "4 Another organization's media appeal or website (e.g., Alzheimer's Association, clinicaltrials.gov)",
+        "8 Other",
+        "9 Unknown"
+      ]
+    },
+    "prestat": {
+      "title": "3. Presumed disease status at enrollment:",
+      "type": "string",
+      "enum": [
+        "1 Case, patient, or proband",
+        "2 Control or normal",
+        "3 No presumed disease status"
+      ]
+    },
+    "prespart": {
+      "title": "4. Presumed participation:",
+      "type": "string",
+      "enum": [
+        "1 Initial evaluation only",
+        "2 Longitudinal follow-up planned"
+      ]
+    },
+    "source": {
+      "title": "5. ADC enrollment type:",
+      "type": "string",
+      "enum": [
+        "1 Primarily ADC-funded (Clinical Core, Satellite Core, or other ADC Core or project)",
+        "2 Subject is supported primarily by a non-ADC study (e.g., RO1, including non-ADC grants supporting the FTLD Module participation)"
+      ]
+    },
+    "birthmo": {
+      "title": "6a. Subject's month of birth(MM)",
+      "description": "Date can be submitted as MM.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "birthyr": {
+      "title": "6b. Subject's year of birth(YYYY)",
+      "description": "Date can be submitted as YYYY.",
+      "type": "integer",
+      "minimum": 1900,
+      "maximum":2100
+    },
+    "sex": {
+      "title": "7. Subject's sex:",
+      "type": "string",
+      "enum": [
+        "1 Male",
+        "2 Female"
+      ]
+    },
+    "hispanic": {
+      "title": "8. Does the subject report being of Hispanic/Latino ethnicity (i.e. having origins from a mainly Spanish-speaking Latin American country), regardless of race?",
+      "type": "string",
+      "enum": [
+        "0 No (If No, SKIP TO QUESTION 9)",
+        "1 Yes",
+        "9 Unknown (If Unknown, SKIP TO QUESTION 9)"
+      ]
+    },
+    "hispor": {
+      "title": "8a. If yes, what are the subject's reported origins?",
+      "description": "If Other(SPECIFY),CONTINUE TO 8a1",
+      "type": "string",
+      "enum": [
+        "1 Mexican, Chicano, or Mexican-American",
+        "2 Puerto Rican",
+        "3 Cuban",
+        "4 Dominican",
+        "5 Central American",
+        "6 South American",
+        "50 Other, (specify)",
+        "99 Unknown"
+      ]
+    },
+    "hisporx": {
+      "title": "8a1. Other (specify subjects reported origins):",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "type": "string"
+    },
+    "race": {
+      "title": "9. What does subject report as his or her race?",
+      "description": "If Other(SPECIFY),CONTINUE TO 9a",
+      "type": "string",
+      "enum": [
+        "1 White",
+        "2 Black or African American",
+        "3 American Indian or Alaska Native",
+        "4 Native Hawaiian or other Pacific Islander",
+        "5 Asian",
+        "50 Other (specify)",
+        "99 Unknown"
+      ]
+    },
+    "racex": {
+      "title": "9a. Other (specify subjects race):",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "type": "string"
+    },
+    "racesec": {
+      "title": "10. What additional race does subject report?",
+      "description": "If '50 Other (specify)', CONTINUE TO 10a",
+      "type": "string",
+      "enum": [
+        "1 White",
+        "2 Black or African American",
+        "3 American Indian or Alaska Native",
+        "4 Native Hawaiian or other Pacific Islander",
+        "5 Asian",
+        "50 Other (specify)",
+        "88 None Reported",
+        "99 Unknown"
+      ]
+    },
+    "racesecx": {
+      "title": "10a. Other (specify subject's additional race):",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "type": "string"
+    },
+    "raceter": {
+      "title": "11. What additional race, beyond what was indicated above in questions 9 and 10, does subject report?",
+      "description": "If '50 Other (specify)',CONTINUE TO 11a",
+      "type": "string",
+      "enum": [
+        "1 White",
+        "2 Black or African American",
+        "3 American Indian or Alaska Native",
+        "4 Native Hawaiian or other Pacific Islander",
+        "5 Asian",
+        "50 Other (specify)",
+        "88 None Reported",
+        "99 Unknown"
+      ]
+    },
+    "raceterx": {
+      "title": "11a. Other (specify subject's additonal race beyond questions 9 and 10):",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "type": "string"
+    },
+    "primlang": {
+      "title": "12. Subject's primary language:",
+      "description": "If Other(SPECIFY),CONTINUE TO 12a",
+      "type": "string",
+      "enum": [
+        "1 English",
+        "2 Spanish",
+        "3 Mandarin",
+        "4 Cantonese",
+        "5 Russian",
+        "6 Japanese",
+        "8 Other primary language (specify)",
+        "9 Unknown"
+      ]
+    },
+    "primlanx": {
+      "title": "12a. Other (specify subject's primary language):",
+      "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%).)",
+      "type": "string"
+    },
+    "educ": {
+      "title": "13. Subject's years of education-(Use the codes here to report the level achieved; if an attempted level is not completed, enter the number of years completed.)",
+      "description": "12 = High school or GED,16 = Bachelor's degree,18 = Master's degree,20 = Doctorate,99 = Unknown",
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        99
+      ]
+    },
+    "maristat": {
+      "title": "14. Subject's current marital status:",
+      "type": "string",
+      "enum": [
+        "1 Married",
+        "2 Widowed",
+        "3 Divorced",
+        "4 Separated",
+        "5 Never married (or marriage was annulled)",
+        "6 Living as married/domestic partner",
+        "Other",
+        "9 Unknown"
+      ]
+    },
+    "livsitua": {
+      "title": "15. What is the subject's living situation?",
+      "type": "string",
+      "enum": [
+        "1 Lives alone",
+        "2 Lives with one other person: a spouse or partner",
+        "3 Lives with one other person: a relative, friend, or roommate",
+        "4 Lives with caregiver who is not spouse/partner, relative, or friend",
+        "5 Lives with a group (related or not related) in a private residence",
+        "6 Lives in group home (e.g., assisted living, nursing home, convent)",
+        "9 Unknown"
+      ]
+    },
+    "independ": {
+      "title": "16. What is the subject's level of independence?",
+      "type": "string",
+      "enum": [
+        "1 Able to live independently",
+        "2 Requires some assistance with complex activities",
+        "3 Requires some assistance with basic activities",
+        "4 Completely dependent",
+        "9 Unknown"
+      ]
+    },
+    "residenc": {
+      "title": "17. What is the subject's primary type of residence?",
+      "type": "string",
+      "enum": [
+        "1 Single - or multi-family private residence (apartment, condo, house)",
+        "2 Retirement community or independent group living",
+        "3 Assisted living, adult family home, or boarding home",
+        "4 Skilled nursing facility, nursing home, hospital, or hospice",
+        "Other",
+        "9 Unknown"
+      ]
+    },
+    "zip": {
+      "title": "18. ZIP Code (first three digits) of subject's primary residence:",
+      "description": "(ZIP Code can be blank if unknown, in the range 006-999)",
+      "type": "string",
+      "pattern": "^[0][0][6-9]|[0][1-9][0-9]|[1-9][0-9][0-9]$"
+    },
+    "handed": {
+      "title": "19. Is the subject left- or right- handed (for example, which hand would s/he normally use to write or throw a ball)?",
+      "type": "string",
+      "enum": [
+        "1 Left-handed",
+        "2 Right-handed",
+        "3 Ambidextrous",
+        "9 Unknown"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "refersc": {
+              "enum": [
+                "1 Self-referral",
+                "2 Non-professional contact (spouse/partner, relative, friend, coworker, etc.)"
+              ]
+            }
+          },
+          "required": [
+            "learned"
+          ]
+        },
+        {
+          "properties": {
+            "refersc": {
+              "enum": [
+                "3 ADC participant referral",
+                "4 ADC clinician, staff, or investigator referral",
+                "5 Nurse, doctor, or other health care provider",
+                "6 Other research study clinician/staff/investigator (non-ADC; e.g., ADNI, Women's Health Initiative)",
+                "7 Non-ADC media appeal (e.g., Alzheimer's Association)",
+                "8 Other",
+                "9 Unknown"
+              ]
+            }
+          },
+          "allOf": [
+            {
+              "not": {
+                "required": [
+                  "learned"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "hispanic": {
+              "enum": [
+                "1 Yes"
+              ]
+            }
+          },
+          "required": [
+            "hispor"
+          ]
+        },
+        {
+          "properties": {
+            "hispanic": {
+              "enum": [
+                "0 No (If No, SKIP TO QUESTION 9)",
+                "9 Unknown (If Unknown, SKIP TO QUESTION 9)"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "hispor"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "hispor": {
+              "enum": [
+                "50 Other, (specify)"
+              ]
+            }
+          },
+          "required": [
+            "hisporx"
+          ]
+        },
+        {
+          "properties": {
+            "hispor": {
+              "enum": [
+                "1 Mexican, Chicano, or Mexican-American",
+                "2 Puerto Rican",
+                "3 Cuban",
+                "4 Dominican",
+                "5 Central American",
+                "6 South American",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "hisporx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "race": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "racex"
+          ]
+        },
+        {
+          "properties": {
+            "race": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "racex"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "racesec": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "racesecx"
+          ]
+        },
+        {
+          "properties": {
+            "racesec": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "88 None Reported",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "racesecx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "raceter": {
+              "enum": [
+                "50 Other (specify)"
+              ]
+            }
+          },
+          "required": [
+            "raceterx"
+          ]
+        },
+        {
+          "properties": {
+            "raceter": {
+              "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or other Pacific Islander",
+                "5 Asian",
+                "88 None Reported",
+                "99 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "raceterx"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "primlang": {
+              "enum": [
+                "8 Other primary language (specify)"
+              ]
+            }
+          },
+          "required": [
+            "primlanx"
+          ]
+        },
+        {
+          "properties": {
+            "primlang": {
+              "enum": [
+                "1 English",
+                "2 Spanish",
+                "3 Mandarin",
+                "4 Cantonese",
+                "5 Russian",
+                "6 Japanese",
+                "9 Unknown"
+              ]
+            }
+          },
+          "not": {
+            "required": [
+              "primlanx"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "facets": {
+    "status": {
+      "title": "Status"
+    },
+    "reason": {
+      "title": "1. Primary reason for coming to ADC:"
+    },
+    "refersc": {
+      "title": "2a. Principal referral source:"
+    },
+    "prestat": {
+      "title": "3. Presumed disease status at enrollment:"
+    },
+    "prespart": {
+      "title": "4. Presumed participation:"
+    },
+    "source": {
+      "title": "5. ADC enrollment type:"
+    },
+    "sex": {
+      "title": "7. Subject's sex:"
+    },
+    "hispanic": {
+      "title": "8. Does the subject report being of Hispanic/Latino ethnicity (i.e. having origins from a mainly Spanish-speaking Latin American country), regardless of race?"
+    },
+    "race": {
+      "title": "9. What does subject report as his or her race?"
+    },
+    "racesec": {
+      "title": "10. What additional race does subject report?"
+    },
+    "raceter": {
+      "title": "11. What additional race, beyond what was indicated above in questions 9 and 10, does subject report?"
+    },
+    "primlang": {
+      "title": "12. Subject's primary language:"
+    },
+    "educ": {
+      "title": "13. Subject's years of education."
+    },
+    "maristat": {
+      "title": "14. Subject's <u> current </u> marital status:"
+    },
+    "independ": {
+      "title": "16. What is the subject's level of independence?"
+    },
+    "residenc": {
+      "title": "17. What is the subject's primary type of residence?"
+    },
+    "zip": {
+      "title": "18. ZIP Code (first three digits) of subject's primary residence:"
+    },
+    "handed": {
+      "title": "19. Is the subject left- or right- handed (for example, which hand would s/he normally use to write or throw a ball)?"
+    }
+  },
+  "boost_values": {
+    "reason": 1.0,
+    "refersc": 1.0,
+    "prestat": 1.0,
+    "prespart": 1.0,
+    "source": 1.0,
+    "sex": 1.0,
+    "hispanic": 1.0,
+    "race": 1.0,
+    "racesec": 1.0,
+    "raceter": 1.0,
+    "primlang": 1.0,
+    "maristat": 1.0,
+    "independ": 1.0,
+    "residenc": 1.0,
+    "handed": 1.0
+  },
+  "changelog": "/profiles/changelogs/ivp_a1.md"
+}
