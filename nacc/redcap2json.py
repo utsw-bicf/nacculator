@@ -35,25 +35,25 @@ def convert_to_json(options, schema_name):
         dtype = str
     )
 
-    # Replace each row/column value (cell) to the corresponding schema value for that header.
     schema_dict = getDict(schema_name)
-    print(json.dumps(schema_dict, indent = 2))
-    for headerIndex, header in enumerate(all_csv):
-        for valueIndex, value in enumerate(all_csv[header]):
-            # Ensure header exists in dictionary.
-            if schema_dict.get(header) is not None:
-                # Map the '<schema_name>_complete' header values without the raw-value appended to the mapped value
-                if str(value) != "nan" and "_complete" in header:
-                    all_csv.iat[valueIndex, headerIndex] = str(schema_dict[header][value])
-                # Ensure the current value for the current header is valid.
-                elif str(value) != "nan" and schema_dict[header].get(value) is not None:
-                    all_csv.iat[valueIndex, headerIndex] = str(value + " " + schema_dict[header][value])
 
     # Create a list of subset headers using the form's schema headers (dictionary.py).
     form_subset_headers = list(schema_dict.keys())
 
     # Create the subset dataframe for the specific form.
     form_csv = all_csv[form_subset_headers]
+
+    # Replace each row/column value (cell) to the corresponding schema value for that header.
+    for headerIndex, header in enumerate(form_csv):
+        for valueIndex, value in enumerate(form_csv[header]):
+            # Ensure header exists in dictionary.
+            if schema_dict.get(header) is not None:
+                # Map the '<schema_name>_complete' header values without the raw-value appended to the mapped value
+                if str(value) != "nan" and "_complete" in header:
+                    form_csv.iat[valueIndex, headerIndex] = str(schema_dict[header][value])
+                # Ensure the current value for the current header is valid.
+                elif str(value) != "nan" and schema_dict[header].get(value) is not None:
+                    form_csv.iat[valueIndex, headerIndex] = str(value + " " + schema_dict[header][value])
 
     # Drop all fully empty records (rows).
     # Runs .dropna on all columns except the '<schema_name>_complete' header b/c '<schema_name>_complete' makes empty records not empty.
@@ -144,16 +144,14 @@ def main():
     # List of every schema name possible in the .CSV file
     schema_names = ["ivp_a1", "fvp_a1", "master_id", "header"]
 
-    convert_to_json(options, "master_id")
-
     # Output each schema to its own JSON file.
-    # for schema in schema_names:
-    #     try:
-    #         print("[STATUS] Parsing: " + schema)
-    #         convert_to_json(options, schema)
-    #         print("[STATUS] Completed: " + schema, "\n")
-    #     except Exception as e:
-    #         print("[SKIP] Could not parse: " + schema, "\n", e, "\n")
+    for schema in schema_names:
+        try:
+            print("[STATUS] Parsing: " + schema)
+            convert_to_json(options, schema)
+            print("[STATUS] Completed: " + schema, "\n")
+        except Exception as e:
+            print("[SKIP] Could not parse: " + schema, "\n", e, "\n")
 
     print("Done.")
 
