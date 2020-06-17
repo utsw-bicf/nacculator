@@ -99,23 +99,26 @@ def getTypes(dictName):
     return types
 
 def addToDict(k1, v2, headers, dictionary):
+    
     if k1 in headers:
         # Find if the enums is a dictionary
         # If the enums are just numbers then it will
         # be an empty dictionary
         hasDict = False
         for i in v2:
-            if str(i).isnumeric() == False and str(i)[0].isnumeric():
+
+            #print(str(i).split())
+            if str(i).split()[0].isnumeric() and len(str(i).split()) > 1:
                 hasDict = True
                 break
         # add enums to dictionary
+ 
         if hasDict:
             for value in v2:
-                key = value[0]
-                # If the first char is not digit then
+                key = str(value).split()[0]
+                
+                # If the key is not digit then
                 # don't add it in dictionary
                 if key.isnumeric():
-                    dictionary[k1][key] = value[2:]
+                    dictionary[k1][key] = value[len(key) + 1:]
 
-name = "fvp_a1"
-d = getDict(name)

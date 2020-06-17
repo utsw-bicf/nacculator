@@ -55,16 +55,16 @@
             "description": "Which catagory patient belong to",
             "type": "string",
             "enum": [
-                "ADC Core",
-                "Consult",
-                "Research Only",
-                "Control",
-                "ADC relative",
-                "autopsy only",
-                "Autopsied demented relative of ADC patient",
-                "Autopsied non-demented relative of ADC patient",
-                "Autopsied/non-clinic/control",
-                "Unknown/not done"
+                "1 ADC Core",
+                "2 Consult",
+                "3 Research Only",
+                "4 Control",
+                "5 ADC relative",
+                "6 autopsy only",
+                "7 Autopsied demented relative of ADC patient",
+                "8 Autopsied non-demented relative of ADC patient",
+                "9 Autopsied/non-clinic/control",
+                "99 Unknown/not done"
             ]
         },
         "first": {
@@ -87,8 +87,8 @@
             "description": "Patient's gender.",
             "type": "string",
             "enum": [
-                "Male",
-                "Female"
+                "1 Male",
+                "0 Female"
             ]
         },
         "dob": {
@@ -110,9 +110,9 @@
             "title": "If less than 6 years of education does the subject have a work history sufficient to exclude mental retardation?",
             "type": "string",
             "enum": [
-                "Yes",
-                "No",
-                "Unknown"
+                "1 Yes",
+                "0 No",
+                "9 Unknown"
             ]
         },
         "occ": {
@@ -125,9 +125,9 @@
             "description": "only one may be checked and used throughout the study",
             "type": "string",
             "enum": [
-                "English",
-                "Spanish",
-                "Other/Unknown"
+                "1 English",
+                "2 Spanish",
+                "9 Other/Unknown"
             ]
         },
         "ethn": {
@@ -135,9 +135,9 @@
             "description": "Patient's ethnicity",
             "type": "string",
             "enum": [
-                "Yes",
-                "No",
-                "Unknown"
+                "1 Yes",
+                "0 No",
+                "9 Unknown"
             ]
         },
         "racial": {
@@ -145,15 +145,15 @@
             "description": "Patient's racial category. If select Other,  please specify in next question,'Other, please specify' field",
             "type": "string",
             "enum": [
-                "Alaskan Native",
-                "Black or African American",
-                "White",
-                "American Indian",
-                "Asian",
-                "Native Hawaiian or other Pacific Islander",
-                "Multiple races",
-                "Other",
-                "Unknown or not reported"
+                "1 Alaskan Native",
+                "2 Black or African American",
+                "3 White",
+                "4 American Indian",
+                "5 Asian",
+                "6 Native Hawaiian or other Pacific Islander",
+                "7 Multiple races",
+                "8 Other",
+                "9 Unknown or not reported"
             ]
         },
         "racial_other": {
@@ -166,11 +166,11 @@
             "description": "Patient's tribe. If select Other, please specify in next question,'Other, please specify' field",
             "type": "string",
             "enum": [
-                "Cherokee",
-                "Choctaw",
-                "Creek",
-                "Chickasaw",
-                "Other"
+                "1 Cherokee",
+                "2 Choctaw",
+                "3 Creek",
+                "4 Chickasaw",
+                "5 Other"
             ]
         },
         "tribe_other": {
@@ -628,7 +628,7 @@
             "properties": {
                 "racial": {
                     "enum": [
-                        "Other"
+                        "8 Other"
                     ]
                 }
             },
@@ -640,15 +640,15 @@
             "properties": {
                 "racial": {
                     "enum": [
-                        "American Indian"
+                        "4 American Indian"
                     ]
                 },
                 "tribe": {
                     "enum": [
-                        "Cherokee",
-                        "Choctaw",
-                        "Creek",
-                        "Chickasaw"
+                        "1 Cherokee",
+                        "2 Choctaw",
+                        "3 Creek",
+                        "4 Chickasaw"
                     ]
                 }
             },
@@ -661,12 +661,12 @@
             "properties": {
                 "racial": {
                     "enum": [
-                        "American Indian"
+                        "4 American Indian"
                     ]
                 },
                 "tribe": {
                     "enum": [
-                        "Other"
+                        "5 Other"
                     ]
                 }
             },
@@ -679,13 +679,13 @@
             "properties": {
                 "racial": {
                     "enum": [
-                        "Alaskan Native",
-                        "Black or African American",
-                        "White",
-                        "Asian",
-                        "Native Hawaiian or other Pacific Islander",
-                        "Multiple races",
-                        "Unknown or not reported"
+                        "1 Alaskan Native",
+                        "2 Black or African American",
+                        "3 White",
+                        "5 Asian",
+                        "6 Native Hawaiian or other Pacific Islander",
+                        "7 Multiple races",
+                        "9 Unknown or not reported"
                     ]
                 }
             },
@@ -725,9 +725,6 @@
     "facets": {
         "status": {
             "title": "Status"
-        },
-        "ptid": {
-            "title": "ADC Subject ID"
         },
         "pic": {
             "title": "Patient Initial Category"
