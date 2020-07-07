@@ -4,7 +4,7 @@
         "schema_version": {
             "title": "Schema version",
             "description": "The version of the JSON schema that the server uses to validate the object.",
-            "comment":  "Do not submit. The version used to validate the object is set by the server. The default should be set to the current version.",
+            "comment": "Do not submit. The version used to validate the object is set by the server. The default should be set to the current version.",
             "type": "string",
             "pattern": "^\\d+(\\.\\d+)*$",
             "requestMethod": []
@@ -13,8 +13,8 @@
     "uuid": {
         "uuid": {
             "title": "UUID",
-            "description":"The unique identifier associated with every object.",
-            "comment":  "Do not submit. The uuid is set by the server.",
+            "description": "The unique identifier associated with every object.",
+            "comment": "Do not submit. The uuid is set by the server.",
             "type": "string",
             "format": "uuid",
             "serverDefault": "uuid4",
@@ -37,7 +37,7 @@
         "alternate_accessions": {
             "title": "Alternate accessions",
             "description": "Accessions previously assigned to objects that have been merged with this object.",
-	        "comment": "Do not submit. Only admins are allowed to set or update this value.",
+            "comment": "Do not submit. Only admins are allowed to set or update this value.",
             "type": "array",
             "default": [],
             "permission": "import_items",
@@ -63,7 +63,7 @@
                 "title": "Lab alias",
                 "description": "A lab specific identifier to reference an object.",
                 "comment": "Current convention is colon separated lab name and lab identifier. (e.g. john-doe:42).",
-                "type":  "string",
+                "type": "string",
                 "pattern": "^(?:alexander-hoffmann|alexander-rudensky|alexander-urban|ali-mortazavi|alkes-price|andrew-fire|anshul-kundaje|anton-valouev|axel-visel|barbara-wold|bill-noble|bin-yu|bing-ren|bradley-bernstein|brenton-graveley|charles-gersbach|chris-burge|christina-leslie|colin-dewey|david-gifford|david-gilbert|douglas-black|elliott-margulies|emery-bresnick|encode-awg|encode-consortium|encode-processing-pipeline|erez-lieberman|eric-lecuyer|eric-mendehall|ewan-birney|feng-yue|gene-yeo|george-stamatoyannopoulos|greg-cooper|gregory-crawford|guo-cheng-yuan|haiyan-huang|haiyuan-yu|howard-chang|j-michael-cherry|jason-ernst|jason-lieb|jay-shendure|jennifer-harrow|jeremy-luban|job-dekker|joe-ecker|john-lis|john-rinn|john-stamatoyannopoulos|jonathan-pritchard|joseph-costello|kenneth-offit|kevin-struhl|kevin-white|ladeana-hillier|laura-elnitski|len-pennacchio|leonard-lipovich|manolis-kellis|manuel-garber|maria-ciofani|mark-gerstein|mats-ljungman|matteo-pellegrini|michael-bassik|michael-beer|michael-hoffman|michael-snyder|morgan-giddings|nadav-ahituv|pardis-sabeti|paul-khavari|peggy-farnham|peter-bickel|peter-park|piero-carninci|rafael-irizarry|richard-myers|roadmap-epigenomics|rob-spitale|robert-klein|robert-waterston|roderic-guigo|ross-hardison|ryan-tewhey|scott-tenenbaum|sherman-weissman|souma-raychaudhuri|stephen-smale|sunduz-keles|susan-celniker|thomas-gingeras|thomas-tullius|tim-reddy|timothy-hubbard|ting-wang|tommi-jaakkola|unknown|valerie-reinke|vishwanath-iyer|w-james-kent|wei-wang|will-greenleaf|xiang-dong-fu|xiaole-shirley|xinshu-xiao|yi-xing|yijun-ruan|yin-shen|yoav-gilad|zhiping-weng|brian-oliver|david-macalpine|hugo-bellen|peter-cherbas|terry-orr-weaver|abby-dernburg|anthony-hyman|arshad-desai|david-miller|eric-lai|fabio-piano|frank-slack|gary-karpen|gregory-hannon|james-posakony|john-kim|julie-ahringer|kamran-ahmad|kris-gunsalus|lincoln-stein|michael-brent|michael-maccoss|mitzi-kuroda|nikolaus-rajewsky|norbert-perrimon|philip-green|sarah-elgin|steven-henikoff|steven-russell|susan-strome|vincenzo-pirrotta|MitaniLab|UofC-HGAC|wesley-hung|encode|modern|dnanexus|modencode|gencode|ggr|cgc|bloomington|dssc|gtex|pgp|biochain|promocell|nichd|lonza|allcells):[a-zA-Z\\d_$.+!*,()'-]+(?:\\s[a-zA-Z\\d_$.+!*,()'-]+)*$"
             }
         }
@@ -90,10 +90,46 @@
             "title": "Status",
             "type": "string",
             "default": "in progress",
-            "enum" : [
+            "enum": [
                 "deleted",
                 "in progress",
                 "released"
+            ]
+        }
+    },
+    "form_status": {
+        "form_status": {
+            "title": "Complete?",
+            "type": "string",
+            "default": "Incomplete",
+            "enum": [
+                "Incomplete",
+                "Inverified",
+                "Complete"
+            ]
+        }
+    },
+    "redcap_event_name": {
+        "redcap_event_name": {
+            "title": "Event Name",
+            "description": "Redcap form type",
+            "type": "string",
+            "enum": [
+                "Initial Visit",
+                "Follow-up Visit 1",
+                "Follow-up Visit 2",
+                "Follow-up Visit 3",
+                "Follow-up Visit 4",
+                "Follow-up Visit 5",
+                "Follow-up Visit 6",
+                "Follow-up Visit 7",
+                "Follow-up Visit 8",
+                "Follow-up Visit 9",
+                "Follow-up Visit 10",
+                "Follow-up Visit 11",
+                "Follow-up Visit 12",
+                "Follow-up Visit 13",
+                "Follow-up Visit 14"
             ]
         }
     },
@@ -102,7 +138,7 @@
             "title": "Status",
             "type": "string",
             "default": "current",
-            "enum" : [
+            "enum": [
                 "current",
                 "deleted",
                 "disabled"
@@ -117,8 +153,12 @@
             "comment": "Do not submit. The date the object is created is assigned by the server.",
             "type": "string",
             "anyOf": [
-                {"format": "date-time"},
-                {"format": "date"}
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                }
             ],
             "serverDefault": "now",
             "permission": "import_items"
@@ -134,14 +174,14 @@
         }
     },
     "header": {
-       
-        "ptid": {
+        "master_id": {
             "title": "ADC Subject ID",
             "description": "ADC subject ID,Patient ID,",
             "type": "string",
+            "permission": "import_items",
             "linkTo": "Master_id"
+            
         },
-       
         "formver": {
             "title": "Form Version Number",
             "description": "Form Version Number for UDS3",
@@ -151,62 +191,52 @@
                 "B5 v3.1"
             ]
         },
-        "redcap_event_name": {
-            "title": "Event Name",
-            "description": "Redcap form type",
-            "type": "string",
-            "enum": [
-                "Initial Visit",
-                "Follow-up Visit"
-            ]
-        },
         "adcid": {
             "title": "Center ID",
             "description": "Center ID, ADC name",
             "type": "string",
             "enum": [
-                "2 Boston University", 	
-                "3 Case Western University", 	
-                "4 Columbia University", 	
-                "5 Duke University", 	
-                "6 Emory University", 	
-                "7 Massachusetts ADRC", 	
-                "8 Indiana University", 	
-                "9 Johns Hopkins University",	
-                "10 Mayo Clinic", 	
-                "11 Mount Sinai", 	
-                "12 New York University", 	
-                "13 Northwestern University", 	
-                "14 Oregon Health & Science University", 	
-                "15 Rush University", 	
-                "16 University of California, Davis", 	
-                "17 University of California, Los Angeles", 	
-                "18 University of California, San Diego", 	
-                "19 University of Kentucky", 	
-                "20 University of Michigan", 	
-                "21 University of Pennsylvania", 	
-                "22 University of Pittsburgh", 	
-                "25 University of Texas Southwestern", 	
-                "26 University of Washington", 	
-                "27 Washington University in Saint Louis", 	
-                "28 University of Alabama", 	
-                "30 University of Southern California", 	
-                "31 University of California, Irvine", 	
-                "32 Stanford University", 	
-                "33 Arizona ADC", 	
-                "34 University of Arkansas", 	
-                "35 University of California, San Francisco", 	
-                "36 Florida ADC", 	
-                "37 University of Wisconsin", 	
-                "38 University of Kansas", 	
-                "39 Stanford University #2", 	
-                "40 Yale University", 	
-                "41 Florida ADRC", 	
-                "42 Wake Forest University", 	
+                "2 Boston University",
+                "3 Case Western University",
+                "4 Columbia University",
+                "5 Duke University",
+                "6 Emory University",
+                "7 Massachusetts ADRC",
+                "8 Indiana University",
+                "9 Johns Hopkins University",
+                "10 Mayo Clinic",
+                "11 Mount Sinai",
+                "12 New York University",
+                "13 Northwestern University",
+                "14 Oregon Health & Science University",
+                "15 Rush University",
+                "16 University of California, Davis",
+                "17 University of California, Los Angeles",
+                "18 University of California, San Diego",
+                "19 University of Kentucky",
+                "20 University of Michigan",
+                "21 University of Pennsylvania",
+                "22 University of Pittsburgh",
+                "25 University of Texas Southwestern",
+                "26 University of Washington",
+                "27 Washington University in Saint Louis",
+                "28 University of Alabama",
+                "30 University of Southern California",
+                "31 University of California, Irvine",
+                "32 Stanford University",
+                "33 Arizona ADC",
+                "34 University of Arkansas",
+                "35 University of California, San Francisco",
+                "36 Florida ADC",
+                "37 University of Wisconsin",
+                "38 University of Kansas",
+                "39 Stanford University #2",
+                "40 Yale University",
+                "41 Florida ADRC",
+                "42 Wake Forest University",
                 "43 Univeristy of Michigan ADC"
             ]
         },
-       
         "visitmo": {
             "title": "Form date - month",
             "description": "Patient visit date - month,sugest MM",
@@ -237,11 +267,20 @@
             "title": "Examiner's initials (xxx)",
             "description": "Examiner's initials,format XXX.",
             "type": "string",
-            "pattern": "^([A-Z].([A-Z].)?[A-Z].)$"
+            "pattern": "^([A-Z]([A-Z])?[A-Z])$"
+        },
+        "header_complete": {
+            "title": "Header_complete",
+            "type": "string",
+            "default": "Incomplete",
+            "enum": [
+                "Incomplete",
+                "Inverified",
+                "Complete"
+            ]
         }
     },
-
-    "review": { 
+    "review": {
         "review": {
             "title": "Characterization review",
             "description": "Review of the characterization results by an independent reviewer.",
@@ -250,8 +289,11 @@
             "dependencies": {
                 "status": {
                     "oneOf": [
-                         {
-                            "required": ["lab", "reviewed_by"],
+                        {
+                            "required": [
+                                "lab",
+                                "reviewed_by"
+                            ],
                             "properties": {
                                 "status": {
                                     "enum": [
@@ -291,7 +333,7 @@
                     "title": "Review status",
                     "description": "The current state of review.",
                     "type": "string",
-                    "enum" : [
+                    "enum": [
                         "compliant",
                         "not compliant",
                         "exempt from standards",
@@ -313,7 +355,7 @@
                 },
                 "reviewer_comment": {
                     "title": "Reviewer comment",
-                    "description": "Additional information specified by the reviewer.",            
+                    "description": "Additional information specified by the reviewer.",
                     "type": "string",
                     "pattern": "^(\\S+(\\s|\\S)*\\S+|\\S)$"
                 }
@@ -425,20 +467,20 @@
         }
     },
     "lot_id": {
-        "lot_id":{
-    	    "title": "Lot ID",
-    	    "description": "The lot identifier provided by the originating lab or vendor.",
-    	    "type": "string",
+        "lot_id": {
+            "title": "Lot ID",
+            "description": "The lot identifier provided by the originating lab or vendor.",
+            "type": "string",
             "pattern": "^(\\S+(\\s|\\S)*\\S+|\\S)$|^$"
         }
     },
     "source": {
         "source": {
             "title": "Source",
-    	    "description": "The originating lab or vendor.",
-    	    "comment": "See source.json for available identifiers.",
-    	    "type": "string",
-	        "linkTo": "Source"
+            "description": "The originating lab or vendor.",
+            "comment": "See source.json for available identifiers.",
+            "type": "string",
+            "linkTo": "Source"
         }
     },
     "notes": {
@@ -503,7 +545,7 @@
                 "title": "Genetic modification",
                 "description": "Genetic modification(s).",
                 "comment": "See genetic_modification.json for available identifiers.",
-                "type":  "string",
+                "type": "string",
                 "linkTo": "GeneticModification"
             }
         }
@@ -619,7 +661,7 @@
         "treatment_term_name": {
             "title": "Biosample treatment",
             "description": "Ontology term describing a component in the treatment.",
-            "type":  "string"
+            "type": "string"
         }
     },
     "url": {
