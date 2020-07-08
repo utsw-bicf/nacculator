@@ -2,12 +2,18 @@
 
 # Sample execution command (requires python >= 3.7.0):
 # python3 redcap2json.py --fileIn REDCap_export.csv
+# OR (to use API):
+# python3 redcap2json.py
 
 import os
 import sys
 import json
+import pycurl
 import argparse
 import pandas as pd
+from io import BytesIO
+from io import StringIO
+from credentials import REDCAP_API_TOKEN
 from nacc.uds3.dict.dictionary import getDict
 from nacc.uds3.dict.dictionary import getTypes
 
@@ -17,23 +23,77 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--fileIn", action = "store", dest = "fileIn", required = True,
+        "--fileIn", action = "store", dest = "fileIn",
         help = "Path of the CSV file to convert to JSON.")
 
     options = parser.parse_args()
 
     return options
 
-def convert_to_json(options, schema_name):
+def get_csv():
+    """
+    Utilize the REDCap API to export records into CSV format,
+    and use it as the input file to convert to JSON.
+
+    Uses REDCap "Export Records" API
+
+    https://ais.swmed.edu/redcap/api/help/?content=exp_records
+
+    Returns the API's response string
+    (the exported data in CSV format represented as a python string)
+    """
+    redcap_api_token = REDCAP_API_TOKEN
+    redcap_api_url = "https://ais.swmed.edu/redcap/api/"
+
+    if redcap_api_token is None or redcap_api_token == "":
+        print("[ERROR] REDCap API token not specified in credentials.py", "\n")
+        return
+
+    # Parameters to use for API request
+    params = {
+        "token": redcap_api_token,
+        "content": "record",
+        "format": "csv",
+        "type": "flat"
+    }
+
+    # Run curl with API settings and params
+    binary_stream = BytesIO()
+    curl = pycurl.Curl()
+    curl.setopt(curl.URL, redcap_api_url)
+    curl.setopt(curl.HTTPPOST, list(params.items()))
+    curl.setopt(curl.WRITEFUNCTION, binary_stream.write)
+    curl.perform()
+    curl.close()
+
+    # The response from the API request
+    api_response = binary_stream.getvalue().decode("UTF-8")
+
+    binary_stream.close()
+
+    return api_response
+
+def convert_to_json(options, csv_content, schema_name):
     """
     Parses the content matching the given schema_name out of the .CSV and converts it to JSON format.
     """
 
-    # Read in CSV
-    all_csv = pd.read_csv(
-        filepath_or_buffer = options.fileIn,
-        dtype = str
-    )
+    # Create DataFrame by reading specified file, or by API response
+    if options.fileIn is not None:
+        # Read in CSV from specified file
+        all_csv = pd.read_csv(
+            filepath_or_buffer = options.fileIn,
+            dtype = str
+        )
+    elif csv_content is not None and csv_content != "":
+        # Read in CSV content from API response
+        all_csv = pd.read_csv(
+            filepath_or_buffer = StringIO(csv_content),
+            dtype = str
+        )
+    else:
+        print("[ERROR] No input file specified or API response given to convert. Exiting...", "\n")
+        return
 
     # Get dictionary containing mapped values
     schema_dict = getDict(schema_name)
@@ -151,11 +211,22 @@ def main():
     # List of every schema name possible in the .CSV file
     schema_names = ["ivp_a1", "ivp_a2", "fvp_a1", "master_id", "header"]
 
+    # Use REDCap API if file not specified
+    if options.fileIn is None:
+        print("[STATUS] No input file specified - Running REDCap API...", "\n")
+        csv_content = get_csv()
+
+        if csv_content is None or csv_content == "":
+            print("[ERROR] API response failed. Exiting...", "\n")
+            return
+
+        print("[STATUS] API request finished", "\n")
+
     # Output each schema to its own JSON file.
     for schema in schema_names:
         try:
             print("[STATUS] Parsing: " + schema)
-            convert_to_json(options, schema)
+            convert_to_json(options, csv_content, schema)
             print("[STATUS] Completed: " + schema, "\n")
         except Exception as e:
             print("[SKIP] Could not parse: " + schema, "\n", e, "\n")
