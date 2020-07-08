@@ -41,6 +41,15 @@ def convert_to_json(options, schema_name):
     # Create a list of subset headers using the form's schema headers (dictionary.py).
     form_subset_headers = list(schema_dict.keys())
 
+    # Drop any headers in form_subset_headers that are not in the CSV file
+    headers_not_found = []
+    for header in form_subset_headers:
+        if header not in all_csv:
+            headers_not_found.append(header)
+            print("[DROP]:", header, "not a header in CSV file")
+    for header in headers_not_found:
+        form_subset_headers.remove(header)
+
     # Create the subset dataframe for the specific form.
     form_csv = all_csv[form_subset_headers]
 
@@ -140,7 +149,7 @@ def main():
     options = parse_args()
 
     # List of every schema name possible in the .CSV file
-    schema_names = ["ivp_a1", "fvp_a1", "master_id", "header"]
+    schema_names = ["ivp_a1", "ivp_a2", "fvp_a1", "master_id", "header"]
 
     # Output each schema to its own JSON file.
     for schema in schema_names:

@@ -18,14 +18,13 @@ formHeaders["header"] = header
 forms = ["master_id", "header", "ivp_a1", "ivp_a2", "fvp_a1"]
 
 def getDict(dictName):
-    
     dictionary = {}
-    
+
     if dictName in forms:
         # Read the data from json schema file
         # We now have a Python dictionary
         if dictName == "header":
-            schemaFile = "mixins.json" 
+            schemaFile = "mixins.json"
         else :
             schemaFile = dictName + ".json"
 
@@ -37,8 +36,7 @@ def getDict(dictName):
                 properties = data["header"]
             else:
                 properties = data['properties']
-            
-            
+
             # Read each property in properties
             for (k1, v1) in properties.items():
                 dictionary[k1] = {}
@@ -53,15 +51,14 @@ def getDict(dictName):
                                     dictionary[k3] = {}
                                     for (k4, v4) in v3.items():
                                         if k4 == "enum":
-    
                                             addToDict(k3, v4, dictionary)
-                                    
+
         dictionary[dictName + "_complete"] = {"0":"incomplete", "1":"unverified", "2":"complete"}
         if "schema_version" in dictionary:
             dictionary.pop("schema_version")
     else:
         print("No such dictionary!")
-    
+
 
     return dictionary
 
@@ -69,11 +66,10 @@ def getTypes(dictName):
     types = {}
     if dictName in forms:
         if dictName == "header":
-            schemaFile = "mixins.json" 
+            schemaFile = "mixins.json"
         else :
             schemaFile = dictName + ".json"
-        
-        
+
         filepath = resource_filename(__name__, schemaFile)
         with open(filepath) as f:
             data = json.load(f)
@@ -91,43 +87,34 @@ def getTypes(dictName):
                                 if k2 == "properties":
                                    types[k1][k2]  = {}
                                    for (k3, v3) in v2.items():
-                                      
+
                                       for (k4, v4) in v3.items():
                                           if k4 == "type":
-                                             types[k1][k2][k3] = {k4: v4} 
-                            
+                                             types[k1][k2][k3] = {k4: v4}
+
         types[dictName + "_complete"] = {"type": "string"}
     else:
         print("No such schema!")
-    
+
     return types
 
-
 def addToDict(k1, v2, dictionary):
-    
     #if k1 in headers:
-        # Find if the enums is a dictionary
-        # If the enums are just numbers then it will
-        # be an empty dictionary
-        hasDict = False
-        for i in v2:
+    # Find if the enums is a dictionary
+    # If the enums are just numbers then it will
+    # be an empty dictionary
+    hasDict = False
+    for i in v2:
+        if str(i).split()[0].isnumeric() and len(str(i).split()) > 1:
+            hasDict = True
+            break
 
-            #print(str(i).split())
-            if str(i).split()[0].isnumeric() and len(str(i).split()) > 1:
-                hasDict = True
-                break
-        # add enums to dictionary
- 
-        if hasDict:
-            
-            
-            for value in v2:
-                key = str(value).split()[0]
-                
-                # If the key is not digit then
-                # don't add it in dictionary
-                if key.isnumeric():
-                    dictionary[k1][key] = value[len(key) + 1:]
+    # add enums to dictionary
+    if hasDict:
+        for value in v2:
+            key = str(value).split()[0]
 
-d = getDict("fvp_a1")
-t = getTypes("header")
+            # If the key is not digit then
+            # don't add it in dictionary
+            if key.isnumeric():
+                dictionary[k1][key] = value[len(key) + 1:]
