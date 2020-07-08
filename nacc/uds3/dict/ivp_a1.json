@@ -5,9 +5,10 @@
   "id": "/profiles/ivp_a1.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "identifyingProperties": [
-    "uuid"
+    "uuid","master_id"
   ],
   "required": [
+    "master_id","adcid","visitmo","visitday","visityr","visitnum","initials","header_complete",
     "reason",
     "refersc",
     "prestat",
@@ -26,7 +27,8 @@
     "independ",
     "residenc",
     "zip",
-    "handed"
+    "handed",
+    "form_status"
   ],
   "additionalProperties": false,
   "mixinProperties": [
@@ -40,6 +42,12 @@
       "$ref": "mixins.json#/standard_status"
     },
     {
+      "$ref": "mixins.json#/header"
+    },
+    {
+      "$ref": "mixins.json#/form_status"
+    },
+    {
       "$ref": "mixins.json#/uuid"
     }
   ],
@@ -48,6 +56,7 @@
     "schema_version": {
       "default": "1"
     },
+
     "reason": {
       "title": "1. Primary reason for coming to ADC:",
       "type": "string",
@@ -296,7 +305,7 @@
         "4 Separated",
         "5 Never married (or marriage was annulled)",
         "6 Living as married/domestic partner",
-        "Other",
+        "8 Other",
         "9 Unknown"
       ]
     },
@@ -332,7 +341,7 @@
         "2 Retirement community or independent group living",
         "3 Assisted living, adult family home, or boarding home",
         "4 Skilled nursing facility, nursing home, hospital, or hospice",
-        "Other",
+        "5 Other",
         "9 Unknown"
       ]
     },
@@ -662,7 +671,64 @@
       "title": "19. Is the subject left- or right- handed (for example, which hand would s/he normally use to write or throw a ball)?"
     }
   },
+  "columns": {
+    "status": {
+      "title": "Status"
+    },
+    "reason": {
+      "title": "1. Primary reason for coming to ADC:"
+    },
+    "refersc": {
+      "title": "2a. Principal referral source:"
+    },
+    "prestat": {
+      "title": "3. Presumed disease status at enrollment:"
+    },
+    "prespart": {
+      "title": "4. Presumed participation:"
+    },
+    "source": {
+      "title": "5. ADC enrollment type:"
+    },
+    "sex": {
+      "title": "7. Subject's sex:"
+    },
+    "hispanic": {
+      "title": "8. Does the subject report being of Hispanic/Latino ethnicity (i.e. having origins from a mainly Spanish-speaking Latin American country), regardless of race?"
+    },
+    "race": {
+      "title": "9. What does subject report as his or her race?"
+    },
+    "racesec": {
+      "title": "10. What additional race does subject report?"
+    },
+    "raceter": {
+      "title": "11. What additional race, beyond what was indicated above in questions 9 and 10, does subject report?"
+    },
+    "primlang": {
+      "title": "12. Subject's primary language:"
+    },
+    "educ": {
+      "title": "13. Subject's years of education."
+    },
+    "maristat": {
+      "title": "14. Subject's <u> current </u> marital status:"
+    },
+    "independ": {
+      "title": "16. What is the subject's level of independence?"
+    },
+    "residenc": {
+      "title": "17. What is the subject's primary type of residence?"
+    },
+    "zip": {
+      "title": "18. ZIP Code (first three digits) of subject's primary residence:"
+    },
+    "handed": {
+      "title": "19. Is the subject left- or right- handed (for example, which hand would s/he normally use to write or throw a ball)?"
+    }
+  },
   "boost_values": {
+    "master_id": 1.0,
     "reason": 1.0,
     "refersc": 1.0,
     "prestat": 1.0,
