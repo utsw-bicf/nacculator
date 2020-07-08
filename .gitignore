@@ -12,7 +12,7 @@ build/
 *.egg-info/
 
 # Ignore credentials.py file
-nacc/credentials.py
+credentials.py
 
 # Anything else is probably a preference. Think twice and then ask three people
 # before adding something else.
