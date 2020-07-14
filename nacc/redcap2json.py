@@ -133,8 +133,8 @@ def convert_to_json(options, csv_content, schema_name):
     # Makes it simple to remove specific key/value pairs later on.
     form_csv = form_csv.fillna(value = "")
 
-    # Rename the '<schema_name>_complete' header
-    form_csv = form_csv.rename(columns = {schema_name + "_complete": "form_status"})
+    # Drop the '<schema_name>_complete' header from output
+    form_csv = form_csv.drop(columns = schema_name + "_complete")
 
     # Convert form to JSON
     form_json = form_csv.to_json(
@@ -221,6 +221,8 @@ def main():
             return
 
         print("[STATUS] API request finished", "\n")
+    else:
+        csv_content = options.fileIn
 
     # Output each schema to its own JSON file.
     for schema in schema_names:
