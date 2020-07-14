@@ -63,6 +63,8 @@ def get_csv():
     curl.setopt(curl.URL, redcap_api_url)
     curl.setopt(curl.HTTPPOST, list(params.items()))
     curl.setopt(curl.WRITEFUNCTION, binary_stream.write)
+    curl.setopt(pycurl.SSL_VERIFYPEER, 1)
+    curl.setopt(pycurl.SSL_VERIFYHOST, 2)
     curl.perform()
     curl.close()
 
