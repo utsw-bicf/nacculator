@@ -34,7 +34,8 @@ setup(
 
     install_requires=[
         "cappy @ git+https://github.com/ctsit/cappy.git@2.0.0",
-        "pandas"
+        "pandas",
+        "pycurl"
     ],
 
     python_requires=">=3.7.0",
