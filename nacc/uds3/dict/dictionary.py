@@ -53,12 +53,20 @@ def getDict(dictName):
                                         if k4 == "enum":
                                             addToDict(k3, v4, dictionary)
 
+        # Add 'dictName'_complete header
         dictionary[dictName + "_complete"] = {"0":"incomplete", "1":"unverified", "2":"complete"}
         if "schema_version" in dictionary:
             dictionary.pop("schema_version")
+
+        # Add individual visit fields to
+        # convert into a single 'visitdate' header
+        if dictName == "header":
+            dictionary["visitmo"] = {}
+            dictionary["visitday"] = {}
+            dictionary["visityr"] = {}
+
     else:
         print("No such dictionary!")
-
 
     return dictionary
 
@@ -92,7 +100,20 @@ def getTypes(dictName):
                                           if k4 == "type":
                                              types[k1][k2][k3] = {k4: v4}
 
+        # Add type for 'dictName'_complete header
         types[dictName + "_complete"] = {"type": "string"}
+
+        # Add individual visit fields types
+        if dictName == "header":
+            types["visitmo"] = {
+                "type": "string"
+            }
+            types["visitday"] = {
+                "type": "string"
+            }
+            types["visityr"] = {
+                "type": "string"
+            }
     else:
         print("No such schema!")
 

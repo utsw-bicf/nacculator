@@ -104,35 +104,12 @@
             "default": "Incomplete",
             "enum": [
                 "Incomplete",
-                "Inverified",
+                "Unverified",
                 "Complete"
             ]
         }
     },
-    "redcap_event_name": {
-        "redcap_event_name": {
-            "title": "Event Name",
-            "description": "Redcap form type",
-            "type": "string",
-            "enum": [
-                "Initial Visit",
-                "Follow-up Visit 1",
-                "Follow-up Visit 2",
-                "Follow-up Visit 3",
-                "Follow-up Visit 4",
-                "Follow-up Visit 5",
-                "Follow-up Visit 6",
-                "Follow-up Visit 7",
-                "Follow-up Visit 8",
-                "Follow-up Visit 9",
-                "Follow-up Visit 10",
-                "Follow-up Visit 11",
-                "Follow-up Visit 12",
-                "Follow-up Visit 13",
-                "Follow-up Visit 14"
-            ]
-        }
-    },
+   
     "shared_status": {
         "status": {
             "title": "Status",
@@ -171,6 +148,14 @@
             "linkTo": "User",
             "serverDefault": "userid",
             "permission": "import_items"
+        }
+    },
+    "examinier_initials":{
+        "initials": {
+            "title": "Examiner's initials (xxx)",
+            "description": "Examiner's initials,format XXX.",
+            "type": "string",
+            "pattern": "^([A-Z]([A-Z])?[A-Z])$"
         }
     },
     "header": {
@@ -237,25 +222,15 @@
                 "43 Univeristy of Michigan ADC"
             ]
         },
-        "visitmo": {
-            "title": "Form date - month",
-            "description": "Patient visit date - month,sugest MM",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 12
-        },
-        "visitday": {
-            "title": "Form date - day",
-            "description": "Patient visit date - day, suggest DD",
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 31
-        },
-        "visityr": {
-            "title": "Form date - year",
-            "description": "Patient visit date - year, suggest YYYY",
-            "type": "integer",
-            "minimum": 1900
+        
+        "visit_date": {
+            "title": "Visit date",
+            "description": "Date of visit,format as YYYY-MM-DD",
+            "comment": "Date can be submitted as YYYY-MM-DD.",
+            "type": "string",
+            "anyOf": [
+                {"format": "date"}
+            ]
         },
         "visitnum": {
             "title": "ADC Visit #",
@@ -263,19 +238,14 @@
             "type": "string",
             "pattern": "^([0-9]?[0-9]?[0-9])$"
         },
-        "initials": {
-            "title": "Examiner's initials (xxx)",
-            "description": "Examiner's initials,format XXX.",
-            "type": "string",
-            "pattern": "^([A-Z]([A-Z])?[A-Z])$"
-        },
+        
         "header_complete": {
             "title": "Header_complete",
             "type": "string",
             "default": "Incomplete",
             "enum": [
                 "Incomplete",
-                "Inverified",
+                "Unverified",
                 "Complete"
             ]
         }

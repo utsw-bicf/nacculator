@@ -1,14 +1,20 @@
 {
   "title": "NACC Uniform Data Set (UDS) - INITIAL VISIT PACKETFORM A1: SUBJECT DEMOGRAPHICS ",
-  "description": "INSTRUCTIONS: This form is to be completed by intake interviewer based on ADC scheduling records, subject interview, medical records, and proxy co-participant report (as needed). For additional clarification and examples, see UDS Coding Guidebook for Initial Visit Packet, Form A1. Check only one box per question.",
+  "description": "INSTRUCTIONS: This form is to be completed by intake interviewer based on ADC scheduling records,subject interview\r, medical records, and proxy co-participant report (as needed),For additional clarification and examples, see UDS Coding Guidebook for Initial Visit Packet.Form A1. Check only one box per question.",
   "comment": "Schema for submitting UDS_ivp_A1 form information.",
   "id": "/profiles/ivp_a1.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "identifyingProperties": [
-    "uuid","master_id"
+    "uuid",
+    "master_id"
   ],
   "required": [
-    "master_id","adcid","visitmo","visitday","visityr","visitnum","initials","header_complete",
+    "master_id",
+    "adcid",
+    "visit_date",
+    "visitnum",
+    "initials",
+    "header_complete",
     "reason",
     "refersc",
     "prestat",
@@ -45,6 +51,9 @@
       "$ref": "mixins.json#/header"
     },
     {
+      "$ref": "mixins.json#/examinier_initials"
+    },
+    {
       "$ref": "mixins.json#/form_status"
     },
     {
@@ -56,7 +65,6 @@
     "schema_version": {
       "default": "1"
     },
-
     "reason": {
       "title": "1. Primary reason for coming to ADC:",
       "type": "string",
@@ -133,7 +141,18 @@
       "description": "Date can be submitted as YYYY.",
       "type": "integer",
       "minimum": 1900,
-      "maximum":2100
+      "maximum": 2100
+    },
+    "birth_date": {
+      "title": "Surgery date",
+      "description": "Date of surgery.",
+      "comment": "Date can be submitted as YYYY-MM-DD.",
+      "type": "string",
+      "anyOf": [
+        {
+          "format": "YYYY-MM"
+        }
+      ]
     },
     "sex": {
       "title": "7. Subject's sex:",

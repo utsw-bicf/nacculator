@@ -5,7 +5,8 @@
     "id": "/profiles/master_id.json",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "identifyingProperties": [
-        "uuid","ptid"
+        "uuid",
+        "ptid"
     ],
     "required": [
         "ptid",
@@ -39,7 +40,10 @@
             "title": "ADC Subject ID",
             "description": "ADC Subject ID,Patient ID, Accession",
             "comment": "CE personnel are allowed to set this value.",
-            "type": "string"
+            "type": "string",
+            "permission": "import_items",
+            "pattern": "^([0-9]{6})$",
+            "uniqueKey": true
         },
         "utsw_mrn": {
             "title": "UTSW MRN",
@@ -93,7 +97,12 @@
         "dob": {
             "title": "Date of Birth",
             "description": "Patient's date of birth.Date can be submitted as MM/DD/YYYY.",
-            "type": "string"
+            "type": "string",
+            "anyOf": [
+                {
+                    "format": "date"
+                }
+            ]
         },
         "ssnmed": {
             "title": "Social Security Number",
@@ -493,10 +502,11 @@
                 "alt_email": {
                     "title": "Email",
                     "type": "string",
-                    "anyOf":[{
-                        "format":"email"
-                    }]
-
+                    "anyOf": [
+                        {
+                            "format": "email"
+                        }
+                    ]
                 }
             }
         },
@@ -586,7 +596,6 @@
                 "larzip": {
                     "title": "Zip",
                     "type": "string"
-
                 },
                 "lar_hmphone": {
                     "title": "Home Phone",
@@ -597,27 +606,25 @@
                     "title": "Home Phone ext",
                     "type": "string",
                     "pattern": "^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
-                    
-
                 },
                 "larphone": {
                     "title": "Alt Phone",
                     "type": "string",
                     "pattern": "^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
-
                 },
                 "laraltphone": {
                     "title": "Alt Phone ext",
                     "type": "string",
                     "pattern": "^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
-
                 },
                 "laremail": {
                     "title": "Email",
                     "type": "string",
-                    "anyOf":[{
-                        "format":"email"
-                    }]
+                    "anyOf": [
+                        {
+                            "format": "email"
+                        }
+                    ]
                 }
             }
         }
@@ -720,7 +727,6 @@
             ]
         }
     ],
-
     "facets": {
         "status": {
             "title": "Status"
