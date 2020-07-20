@@ -284,7 +284,7 @@ def main():
     options = parse_args()
 
     # List of every schema name possible in the .CSV file
-    schema_names = ["ivp_a1", "ivp_a2", "fvp_a1", "master_id"]
+    schema_names = ["ivp_a1", "ivp_a2", "fvp_a1", "master_id", "header"]
 
     # Use REDCap API if file not specified
     if options.fileIn is None:
