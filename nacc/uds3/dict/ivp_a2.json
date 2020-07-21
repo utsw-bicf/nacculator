@@ -1,0 +1,666 @@
+{
+    "title": "NACC UNIFORM DATA SET (UDS) -INITIAL VISIT PACKET Form A2: Co-participant Demographics Link to NACC Coding Guidebook",
+    "description": "INSTRUCTIONS: This form is to be completed by intake interviewer based on co-participant's report. For additional clarification and examples, see UDS Coding Guidebook for Initial Visit Packet, Form A2. Check only one box per question, Link to NACC Coding Guidebook 'http://www.alz.washington.edu/NONMEMBER/UDS/DOCS/VER3/UDS3_ivp_guidebook.pdf'",
+    "comment": "Schema for submitting UDS_ivp_A2 form information.",
+    "id": "/profiles/ivp_a2.json",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "identifyingProperties": [
+        "uuid"
+    ],
+    "required": [
+        "master_id",
+        "adcid",
+        "visit_date",
+        "visitnum",
+        "initials",
+        "header_complete",
+        "inbirmo",
+        "inbiryr",
+        "insex",
+        "inhisp",
+        "inrace",
+        "inrasec",
+        "inrater",
+        "ineduc",
+        "inrelto",
+        "inknown",
+        "inlivwth",
+        "inrely",
+        "form_status"
+    ],
+    "additionalProperties": false,
+    "mixinProperties": [
+        {
+            "$ref": "mixins.json#/schema_version"
+        },
+        {
+            "$ref": "mixins.json#/submitted"
+        },
+        {
+            "$ref": "mixins.json#/standard_status"
+        },
+        {
+            "$ref": "mixins.json#/header"
+        },
+        {
+            "$ref": "mixins.json#/examinier_initials"
+        },
+        {
+            "$ref": "mixins.json#/form_status"
+        },
+        {
+            "$ref": "mixins.json#/uuid"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "schema_version": {
+            "default": "1"
+        },
+        "inbirmo": {
+            "title": "1a. Co-participant's month of birth:",
+            "description": "Date can be submitted as MM.((MM) 1-12, 99 = Unknown)",
+            "type": "string",
+            "pattern": "^[0][1-9]|[1][0-2]|[99]$"
+        },
+        "inbiryr": {
+            "title": "1b. Co-participant's year of birth:",
+            "description": "Date can be submitted as YYYY.((YYYY) 1875 to (current year minus 15), 9999 = Unknown)",
+            "type": "string",
+            "pattern": "^[1][8][7][5-9]|[1][8][8-9][0-9]|[1][9][0-9][0-9]|[2][0][0-9][0-9]|[9999]$"
+        },
+        "insex": {
+            "title": "2. Co-participant's sex:",
+            "type": "string",
+            "enum": [
+                "1 Male",
+                "2 Female"
+            ]
+        },
+        "inhisp": {
+            "title": "3. Does the co-participant report being of Hispanic/Latino ethnicity (i.e., having origins from a mainly Spanish-speaking Latin American country), regardless of race? ",
+            "type": "string",
+            "description": "If '1 Yes', CONTINUE TO 3a",
+            "enum": [
+                "0 No (If No, SKIP TO QUESTION 4)",
+                "1 Yes",
+                "9 Unknown (If Unknown, SKIP TO QUESTION 4)"
+            ]
+        },
+        "inhispor": {
+            "title": "3a. If yes, what are the co-participant's reported origins?",
+            "description": "If Other (specify), CONTINUE TO 3a1",
+            "type": "string",
+            "enum": [
+                "1 Mexican, Chicano, or Mexican-American",
+                "2 Puerto Rican",
+                "3 Cuban",
+                "4 Dominican",
+                "5 Central American",
+                "6 South American",
+                "50 Other (specify)",
+                "99 Unknown"
+            ]
+        },
+        "inhispox": {
+            "title": "3a1. Other (specify co-participant's Hispanic/Latino origins):",
+            "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%))",
+            "type": "string"
+        },
+        "inrace": {
+            "title": "4. What does the co-participant report as his or her race?",
+            "description": "If Other (specify), CONTINUE TO 4a",
+            "type": "string",
+            "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or Other Pacific Islander",
+                "5 Asian",
+                "50 other (specify)",
+                "99 Unknown"
+            ]
+        },
+        "inracex": {
+            "title": "4a. Other (specify the co-participant's race):",
+            "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%))",
+            "type": "string"
+        },
+        "inrasec": {
+            "title": "5. What additional race does the co-participant report?",
+            "description": "If Other (specify), CONTINUE TO 4a",
+            "type": "string",
+            "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or Other Pacific Islander",
+                "5 Asian",
+                "50 Other (specify)",
+                "88 None Reported",
+                "99 Unknown"
+            ]
+        },
+        "inrasecx": {
+            "title": "5a.  Other (specify the co-participant's additional race):",
+            "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%))",
+            "type": "string"
+        },
+        "inrater": {
+            "title": "6. What additional race, beyond those reported in questions 4 and 5, does the co-participant report?",
+            "description": "If Other (specify), CONTINUE TO 6a",
+            "type": "string",
+            "enum": [
+                "1 White",
+                "2 Black or African American",
+                "3 American Indian or Alaska Native",
+                "4 Native Hawaiian or Other Pacific Islander",
+                "5 Asian",
+                "50 Other (specify)",
+                "88 None Reported",
+                "99 Unknown"
+            ]
+        },
+        "inraterx": {
+            "title": "6a. Other (specify the co-participant's race beyond those in questions 4 and 5):",
+            "description": "(Any text or numbers with the exception of single quotes ('), double quotes (\"), ampersands (&), and percentage signs (%))",
+            "type": "string"
+        },
+        "ineduc": {
+            "title": "7. Co-participant's years of education -- use the codes below to report the level achieved; if an attempted level is not completed, enter the number of years completed:",
+            "description": "12 = High school or GED,16 = Bachelor's degree,18 = Master's degree;20 = Doctorate, >20 = Other,99 = Unknown(0-36, 99=unknown).If '21 >20', CONTINUE TO 'Years of education' and 'Type of degrees (eg. MPH, MBA, etc.)'.",
+            "type": "string",
+            "enum": [
+                "0 0",
+                "1 1",
+                "2 2",
+                "3 3",
+                "4 4",
+                "5 5",
+                "6 6",
+                "7 7",
+                "8 8",
+                "9 9",
+                "10 10",
+                "11 11",
+                "12 12",
+                "13 13",
+                "14 14",
+                "15 15",
+                "16 16",
+                "17 17",
+                "18 18",
+                "19 19",
+                "20 20",
+                "21 >20",
+                "99 99"
+            ]
+        },
+        "ineduc_more_than_20": {
+            "title": "Years of education",
+            "description": "Years of education if more than 20 years",
+            "type": "string",
+            "enum": [
+                "1 21",
+                "2 22",
+                "3 23",
+                "4 24",
+                "5 25",
+                "6 26",
+                "7 27",
+                "8 28",
+                "9 29",
+                "10 30",
+                "11 31",
+                "12 32",
+                "13 33",
+                "14 34",
+                "15 35",
+                "16 36"
+            ]
+        },
+        "ineduc_type": {
+            "title": "Type of degrees (eg. MPH, MBA, etc.)",
+            "description": "Type of degrees if years of education is more than 20",
+            "type": "string"
+        },
+        "inrelto": {
+            "title": "8. What is co-participant's relationship to the subject?",
+            "type": "string",
+            "enum": [
+                "1 Spouse, partner, or companion (include ex-spouse, ex-partner, fiance(e), boyfriend, girlfriend)",
+                "2 Child (by blood or through marriage or adoption)",
+                "3 Sibling (by blood or through marriage or adoption)",
+                "4 Other relative (by blood or through marriage or adoption)",
+                "5 Friend, neighbor, or someone known through family, friends, work, or community (e.g., church)",
+                "6 Paid caregiver, health care provider, or clinician",
+                "7 Other"
+            ]
+        },
+        "inknown": {
+            "title": "8a. How long has the co-participant known the subject?",
+            "description": "((years) 0 - 120, 999 = Unknown)",
+            "type": "string",
+            "pattern": "^[0-9][0-9]?|[1][0-1][0-9]|[1][2][0]|999$"
+        },
+        "inlivwth": {
+            "title": "9. Does the co-participant live with the subject?",
+            "description": "If '0 No', CONTINUE TO 9a and 9b",
+            "type": "string",
+            "enum": [
+                "0 No",
+                "1 Yes (If Yes, SKIP TO QUESTION 10)"
+            ]
+        },
+        "invisits": {
+            "title": "9a. If no, approximate frequency of in-person visits?",
+            "type": "string",
+            "enum": [
+                "1 Daily",
+                "2 At least three times per week",
+                "3 Weekly",
+                "4 At least three times per month",
+                "5 Monthly",
+                "6 Less than once a month"
+            ]
+        },
+        "incalls": {
+            "title": "9b. If no, approximate frequency of telephone contact?",
+            "type": "string",
+            "enum": [
+                "1 Daily",
+                "2 At least three times per week",
+                "3 Weekly",
+                "4 At least three times per month",
+                "5 Monthly",
+                "6 Less than once a month"
+            ]
+        },
+        "inrely": {
+            "title": "10. Is there a question about the co-participant's reliability?",
+            "type": "string",
+            "enum": [
+                "0 No",
+                "1 Yes"
+            ]
+        }
+    },
+    "allOf": [
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "inhisp": {
+                            "enum": [
+                                "1 Yes"
+                            ]
+                        },
+                        "inhispor": {
+                            "enum": [
+                                "50 Other (specify)"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "inhispox"
+                    ]
+                },
+                {
+                    "properties": {
+                        "inhisp": {
+                            "enum": [
+                                "1 Yes"
+                            ]
+                        },
+                        "inhispor": {
+                            "enum": [
+                                "1 Mexican, Chicano, or Mexican-American",
+                                "2 Puerto Rican",
+                                "3 Cuban",
+                                "4 Dominican",
+                                "5 Central American",
+                                "6 South American",
+                                "99 Unknown"
+                            ]
+                        }
+                    },
+                    "not": {
+                        "required": [
+                            "inhispox"
+                        ]
+                    }
+                },
+                {
+                    "properties": {
+                        "inhisp": {
+                            "enum": [
+                                "0 No (If No, SKIP TO QUESTION 4)",
+                                "9 Unknown (If Unknown, SKIP TO QUESTION 4)"
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {
+                            "not": {
+                                "required": [
+                                    "inhispor"
+                                ]
+                            }
+                        },
+                        {
+                            "not": {
+                                "required": [
+                                    "inhispox"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "inrace": {
+                            "enum": [
+                                "50 other (specify)"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "inracex"
+                    ]
+                },
+                {
+                    "properties": {
+                        "inrace": {
+                            "enum": [
+                                "1 White",
+                                "2 Black or African American",
+                                "3 American Indian or Alaska Native",
+                                "4 Native Hawaiian or Other Pacific Islander",
+                                "5 Asian",
+                                "99 Unknown"
+                            ]
+                        }
+                    },
+                    "not": {
+                        "required": [
+                            "inracex"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "inrasec": {
+                            "enum": [
+                                "50 Other (specify)"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "inrasecx"
+                    ]
+                },
+                {
+                    "properties": {
+                        "inrasec": {
+                            "enum": [
+                                "1 White",
+                                "2 Black or African American",
+                                "3 American Indian or Alaska Native",
+                                "4 Native Hawaiian or Other Pacific Islander",
+                                "5 Asian",
+                                "88 None Reported",
+                                "99 Unknown"
+                            ]
+                        }
+                    },
+                    "not": {
+                        "required": [
+                            "inrasecx"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "inrater": {
+                            "enum": [
+                                "50 Other (specify)"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "inraterx"
+                    ]
+                },
+                {
+                    "properties": {
+                        "inrater": {
+                            "enum": [
+                                "1 White",
+                                "2 Black or African American",
+                                "3 American Indian or Alaska Native",
+                                "4 Native Hawaiian or Other Pacific Islander",
+                                "5 Asian",
+                                "88 None Reported",
+                                "99 Unknown"
+                            ]
+                        }
+                    },
+                    "not": {
+                        "required": [
+                            "inraterx"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "ineduc": {
+                            "enum": [
+                                "21 >20"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "ineduc_more_than_20",
+                        "ineduc_type"
+                    ]
+                },
+                {
+                    "properties": {
+                        "ineduc": {
+                            "enum": [
+                                "0 0",
+                                "1 1",
+                                "2 2",
+                                "3 3",
+                                "4 4",
+                                "5 5",
+                                "6 6",
+                                "7 7",
+                                "8 8",
+                                "9 9",
+                                "10 10",
+                                "11 11",
+                                "12 12",
+                                "13 13",
+                                "14 14",
+                                "15 15",
+                                "16 16",
+                                "17 17",
+                                "18 18",
+                                "19 19",
+                                "20 20",
+                                "99 99"
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {
+                            "not": {
+                                "required": [
+                                    "ineduc_more_than_20"
+                                ]
+                            }
+                        },
+                        {
+                            "not": {
+                                "required": [
+                                    "ineduc_type"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "oneOf": [
+                {
+                    "properties": {
+                        "inlivwth": {
+                            "enum": [
+                                "0 No"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "invisits",
+                        "incalls"
+                    ]
+                },
+                {
+                    "properties": {
+                        "inlivwth": {
+                            "enum": [
+                                "1 Yes (If Yes, SKIP TO QUESTION 10)"
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {
+                            "not": {
+                                "required": [
+                                    "invisits"
+                                ]
+                            }
+                        },
+                        {
+                            "not": {
+                                "required": [
+                                    "incalls"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "facets": {
+        "status": {
+            "title": "Status"
+        },
+        "insex": {
+            "title": "2. Co-participant's sex:"
+        },
+        "inhisp": {
+            "title": "3. Does the co-participant report being of Hispanic/Latino ethnicity (i.e., having origins from a mainly Spanish-speaking Latin American country), regardless of race? "
+        },
+        "inrace": {
+            "title": "4. What does the co-participant report as his or her race?"
+        },
+        "inrasec": {
+            "title": "5. What additional race does the co-participant report?"
+        },
+        "inrater": {
+            "title": "6. What additional race, beyond those reported in questions 4 and 5, does the co-participant report?"
+        },
+        "ineduc": {
+            "title": "7. Co-participant's years of education -- use the codes below to report the level achieved; if an attempted level is not completed, enter the number of years completed:"
+        },
+        "inrelto": {
+            "title": "8. What is co-participant's relationship to the subject?"
+        },
+        "inknown": {
+            "title": "8a. How long has the co-participant known the subject?"
+        },
+        "inlivwth": {
+            "title": "9. Does the co-participant live with the subject?"
+        },
+        "inrely": {
+            "title": "10. Is there a question about the co-participant's reliability?"
+        }
+    },
+    "columns": {
+        "status": {
+            "title": "Status"
+        },
+        "insex": {
+            "title": "2. Co-participant's sex:"
+        },
+        "inhisp": {
+            "title": "3. Does the co-participant report being of Hispanic/Latino ethnicity (i.e., having origins from a mainly Spanish-speaking Latin American country), regardless of race? "
+        },
+        "inrace": {
+            "title": "4. What does the co-participant report as his or her race?"
+        },
+        "inrasec": {
+            "title": "5. What additional race does the co-participant report?"
+        },
+        "inrater": {
+            "title": "6. What additional race, beyond those reported in questions 4 and 5, does the co-participant report?"
+        },
+        "ineduc": {
+            "title": "7. Co-participant's years of education -- use the codes below to report the level achieved; if an attempted level is not completed, enter the number of years completed:"
+        },
+        "inrelto": {
+            "title": "8. What is co-participant's relationship to the subject?"
+        },
+        "inknown": {
+            "title": "8a. How long has the co-participant known the subject?"
+        },
+        "inlivwth": {
+            "title": "9. Does the co-participant live with the subject?"
+        },
+        "inrely": {
+            "title": "10. Is there a question about the co-participant's reliability?"
+        }
+    },
+    "boost_values": {
+        "insex": 1.0,
+        "inhisp": 1.0,
+        "inhispor": 1.0,
+        "inhispox": 1.0,
+        "inrace": 1.0,
+        "inracex": 1.0,
+        "inrasec": 1.0,
+        "inrasecx": 1.0,
+        "inrater": 1.0,
+        "inraterx": 1.0,
+        "ineduc": 1.0,
+        "ineduc_more_than_20": 1.0,
+        "ineduc_type": 1.0,
+        "inrelto": 1.0,
+        "inknown": 1.0,
+        "inlivwth": 1.0,
+        "invisits": 1.0,
+        "incalls": 1.0,
+        "inrely": 1.0
+    },
+    "changelog": "/profiles/changelogs/ivp_a2.md"
+}

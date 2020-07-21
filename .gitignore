@@ -11,5 +11,11 @@ dist/
 build/
 *.egg-info/
 
+# Ignore credentials.py file
+nacc/credentials.py
+
+# Ignore DS_Store files
+.DS_Store
+
 # Anything else is probably a preference. Think twice and then ask three people
 # before adding something else.

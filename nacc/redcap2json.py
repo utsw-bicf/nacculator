@@ -2,12 +2,19 @@
 
 # Sample execution command (requires python >= 3.7.0):
 # python3 redcap2json.py --fileIn REDCap_export.csv
+# OR (to use API):
+# python3 redcap2json.py
 
 import os
 import sys
 import json
+import pycurl
 import argparse
 import pandas as pd
+from io import BytesIO
+from io import StringIO
+from datetime import datetime
+from nacc.credentials import REDCAP_API_TOKEN
 from nacc.uds3.dict.dictionary import getDict
 from nacc.uds3.dict.dictionary import getTypes
 
@@ -17,29 +24,126 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--fileIn", action = "store", dest = "fileIn", required = True,
+        "--fileIn", action = "store", dest = "fileIn",
         help = "Path of the CSV file to convert to JSON.")
 
     options = parser.parse_args()
 
     return options
 
-def convert_to_json(options, schema_name):
+def create_iso_8601_str(year = "-", month = "-", day = "-"):
+    """
+    Creates a string that conforms to ISO 8601 date format
+    """
+    # Ensure default values
+    if year == "":
+        year = "-"
+    if month == "":
+        month = "-"
+    if day == "":
+        day = "-"
+
+    # Validate date argument values
+    if year != "-" and len(str(year)) != 4:     # Year not in format YYYY
+        print("[SKIP] Year is not specified in the format: YYYY.", "\n")
+        year = "-"
+
+    if month != "-" and len(str(month)) > 2:    # Month not in format MM (too many digits)
+        print("[SKIP] Month is not specified in the format: MM.", "\n")
+        month = "-"
+    elif month != "-" and len(str(month)) == 1:     # Month is only single digit (append 0 prefix)
+        month = f"0{month}"
+
+    if day != "-" and len(str(day)) > 2:    # Day not in format DD (too many digits)
+        print("[SKIP] Day is not specified in the format: DD.", "\n")
+        day = "-"
+    elif day != "-" and len(str(day)) == 1:     # Day is only single digit (append 0 prefix)
+        day = f"0{day}"
+
+    # Return ISO 8601 formatted string
+    return f"{year}-{month}-{day}"
+
+def get_csv():
+    """
+    Utilize the REDCap API to export records into CSV format,
+    and use it as the input file to convert to JSON.
+
+    Uses REDCap "Export Records" API
+
+    https://ais.swmed.edu/redcap/api/help/?content=exp_records
+
+    Returns the API's response string
+    (the exported data in CSV format represented as a python string)
+    """
+    redcap_api_token = REDCAP_API_TOKEN
+    redcap_api_url = "https://ais.swmed.edu/redcap/api/"
+
+    if redcap_api_token is None or redcap_api_token == "":
+        print("[ERROR] REDCap API token not specified in credentials.py", "\n")
+        return
+
+    # Parameters to use for API request
+    params = {
+        "token": redcap_api_token,
+        "content": "record",
+        "format": "csv",
+        "type": "flat"
+    }
+
+    # Run curl with API settings and params
+    binary_stream = BytesIO()
+    curl = pycurl.Curl()
+    curl.setopt(curl.URL, redcap_api_url)
+    curl.setopt(curl.HTTPPOST, list(params.items()))
+    curl.setopt(curl.WRITEFUNCTION, binary_stream.write)
+    curl.setopt(curl.SSL_VERIFYPEER, 1)
+    curl.setopt(curl.SSL_VERIFYHOST, 2)
+    curl.perform()
+    curl.close()
+
+    # The response from the API request
+    api_response = binary_stream.getvalue().decode("UTF-8")
+
+    binary_stream.close()
+
+    return api_response
+
+def convert_to_json(options, csv_content, schema_name):
     """
     Parses the content matching the given schema_name out of the .CSV and converts it to JSON format.
     """
 
-    # Read in CSV
-    all_csv = pd.read_csv(
-        filepath_or_buffer = options.fileIn,
-        dtype = str
-    )
+    # Create DataFrame by reading specified file, or by API response
+    if options is not None and options.fileIn is not None:
+        # Read in CSV from specified file
+        all_csv = pd.read_csv(
+            filepath_or_buffer = options.fileIn,
+            dtype = str
+        )
+    elif csv_content is not None and csv_content != "":
+        # Read in CSV content from API response
+        all_csv = pd.read_csv(
+            filepath_or_buffer = StringIO(csv_content),
+            dtype = str
+        )
+    else:
+        print("[ERROR] No input file specified or API response given to convert. Exiting...", "\n")
+        return
 
-    # Get dictionary containing mapped values
-    schema_dict = getDict(schema_name)
+    # Get dictionary containing mapped values (schema_name dictionary merged with header dictionary)
+    schema_dict = {**getDict(schema_name), **getDict("header")}
 
     # Create a list of subset headers using the form's schema headers (dictionary.py).
     form_subset_headers = list(schema_dict.keys())
+
+    # Drop any headers in form_subset_headers that are not in the CSV file
+    headers_not_found = []
+    for header in form_subset_headers:
+        if header not in all_csv:
+            headers_not_found.append(header)
+            print("[DROP]:", header, "not a header in CSV file")
+    for header in headers_not_found:
+        form_subset_headers.remove(header)
 
     # Create the subset dataframe for the specific form.
     form_csv = all_csv[form_subset_headers]
@@ -64,8 +168,8 @@ def convert_to_json(options, schema_name):
     # Makes it simple to remove specific key/value pairs later on.
     form_csv = form_csv.fillna(value = "")
 
-    # Rename the '<schema_name>_complete' header
-    form_csv = form_csv.rename(columns = {schema_name + "_complete": "form_status"})
+    # Drop the '<schema_name>_complete' header from output
+    form_csv = form_csv.drop(columns = schema_name + "_complete")
 
     # Convert form to JSON
     form_json = form_csv.to_json(
@@ -81,7 +185,8 @@ def convert_to_json(options, schema_name):
     form_dict = form_csv.to_dict(orient = "records")
     to_delete = []
     groups_to_add = {}
-    schema_types = getTypes(schema_name)
+    # Get types dictionary (schema_name dictionary merged with header dictionary)
+    schema_types = {**getTypes(schema_name), **getTypes("header")}
     for index, record in enumerate(form_dict):
         for key, value in form_dict[index].items():
             # Drop empty key/value pairs that have empty values
@@ -96,7 +201,7 @@ def convert_to_json(options, schema_name):
 
             # If key should be nested, nest it
             if schema_name == "master_id":
-                # TODO: Parse these from schema in seperate dictionary function. Determine return type (lists of lists??)
+                # TODO: Parse these from schema in seperate dictionary function.
                 nested_groups = {
                     "p_info": ["p_addr1", "p_addr2", "p_city", "p_state", "p_zip", "p_phone", "p_phoneext", "p_email"],
                     "c_cont1": ["c_name", "c_relat", "c_addr1", "c_addr2", "c_city", "c_state", "c_zip", "c_phone", "c_altphone", "c_altphoneext2", "c_email"],
@@ -126,12 +231,51 @@ def convert_to_json(options, schema_name):
     for pair in to_delete:
         del form_dict[pair[0]][pair[1]]
 
+    # Create single visit_date key for each record
+    add = {}
+    for index, record in enumerate(form_dict):
+        if record.get("visityr") is None \
+            or record.get("visitmo") is None \
+            or record.get("visitday") is None:
+            continue
+        else:
+            year = record["visityr"]
+            month = record["visitmo"]
+            day = record["visitday"]
+            iso_date = create_iso_8601_str(year, month, day)
+            add[index] = iso_date
+    for index, iso_date in add.items():
+        form_dict[index]["visit_date"] = iso_date
+        del form_dict[index]["visityr"]
+        del form_dict[index]["visitmo"]
+        del form_dict[index]["visitday"]
+
+    # Create single birth_date key for each record
+    # IVP_A1 form only
+    if schema_name == "ivp_a1":
+        add = {}
+        for index, record in enumerate(form_dict):
+            if record.get("birthyr") is None \
+                or record.get("birthmo") is None:
+                continue
+            else:
+                year = record["birthyr"]
+                month = record["birthmo"]
+                iso_date = create_iso_8601_str(year, month)
+                add[index] = iso_date
+        for index, iso_date in add.items():
+            form_dict[index]["birth_date"] = iso_date
+            del form_dict[index]["birthyr"]
+            del form_dict[index]["birthmo"]
+
     # Create and write to output JSON file
     form_json = json.dumps(form_dict, indent = 2)
     output_file_path = os.path.join(os.getcwd(), "output_" + schema_name + ".json")
     form_json_file = open(output_file_path, "w")
     form_json_file.write(form_json)
     form_json_file.close()
+
+    return form_json
 
 def main():
     """
@@ -140,13 +284,26 @@ def main():
     options = parse_args()
 
     # List of every schema name possible in the .CSV file
-    schema_names = ["ivp_a1", "fvp_a1", "master_id", "header"]
+    schema_names = ["ivp_a1", "ivp_a2", "fvp_a1", "master_id", "header"]
+
+    # Use REDCap API if file not specified
+    if options.fileIn is None:
+        print("[STATUS] No input file specified - Running REDCap API...", "\n")
+        csv_content = get_csv()
+
+        if csv_content is None or csv_content == "":
+            print("[ERROR] API response failed. Exiting...", "\n")
+            return
+
+        print("[STATUS] API request finished", "\n")
+    else:
+        csv_content = options.fileIn
 
     # Output each schema to its own JSON file.
     for schema in schema_names:
         try:
             print("[STATUS] Parsing: " + schema)
-            convert_to_json(options, schema)
+            convert_to_json(options, csv_content, schema)
             print("[STATUS] Completed: " + schema, "\n")
         except Exception as e:
             print("[SKIP] Could not parse: " + schema, "\n", e, "\n")
